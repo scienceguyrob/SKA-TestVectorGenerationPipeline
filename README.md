@@ -90,7 +90,7 @@ has 16 bins, each describing total pulse intensity.
 
 Note:
 
-The intensity values stored in the files are scaled a [0,255] range.
+The intensity values stored in the files are scaled to a [0,255] range.
 
 This directory also contains a python script, EpnToAsc.py, which converts EPN files saved from the EPN database, to .asc files which describe pulsar pulse profiles. In total there are 3698 asc files (~30 MB unzipped).
 
