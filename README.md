@@ -72,9 +72,9 @@ The software can be found in: /home/psr/soft
 
 The repository contains many files useful for test vector creation. These are summarised by directory.
 
-ASC - This directory contains files which describe pulse profiles extracted from the EPN database. Each file in the directory is named as follows:
+**ASC** - This directory contains files which describe pulse profiles extracted from the EPN database. Each file in the directory is named as follows:
 
-&ltPulsar name&gt_&ltFrequency&gt.asc
+&lt;derp>Pulsar name&gt_&ltFrequency&gt.asc
 
 Where &ltPulsar name&gt is the pulsar 'J' name, and &ltFrequency&gt the observation frequency of the EPN data.
 
