@@ -126,7 +126,7 @@ Scripts have been written to automate the creation of test vectors. These includ
     
 - *InjectPulsarAutomator.py* (version 1.0) - this script reads the files output by InjectPulsarCommandCreator.py (version 1.0), and executes the commands. The script is compatible with python version 2.7.  It requires scipy version 0.15 or later to function. Numpy 1.0 or later, and matplotlib version 1.5 or later are also required.
 
-Versions of pulsar assumed by these scripts:
+Versions of pulsar software assumed by these scripts:
     - *Tempo2* version 2014.11.1
     - *fast_fake* version updated on 29th October 2014, commit 41d05788720577994848c8209b02c7bef02d7ece (see https://github.com/SixByNine/sigproc/blob/master/src/fast_fake.c).
     - *inject_pulsar* version updated on November 19th 2014, commit 94bb492ddea59ff1d8ef34f06e4f642afd06c4a9 (see https://github.com/SixByNine/sigproc/blob/master/src/inject_pulsar.c)
