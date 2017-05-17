@@ -133,4 +133,4 @@ Versions of pulsar software assumed by these scripts:
 
 ### Change log
 
-***Changes since version 1.0** - Image update based on feedback from Sally Cooper (thanks Sal!). Sally found issues with how Mike's version of Sigproc produces file headers (filterbank file headers), and with how the software created fake files. Both issues should be fixed in this build. This build contains a new build of fast_fake and inject_pulsar. No other differences with respect to version 1.0.
+**Changes since version 1.0** - Image update based on feedback from Sally Cooper (thanks Sal!). Sally found issues with how Mike's version of Sigproc produces file headers (filterbank file headers), and with how the software created fake files. Both issues should be fixed in this build. This build contains a new build of fast_fake and inject_pulsar. No other differences with respect to version 1.0.
