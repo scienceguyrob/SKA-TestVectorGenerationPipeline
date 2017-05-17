@@ -285,10 +285,10 @@ ENV PYTHONPATH=$PYTHONPATH:$PRESTO/lib/python
 ##############################################################################################
 # Download test vector files
 WORKDIR /home
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Dockerfile/CentOS/DockerImageReadme.txt
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v1.1/Dockerfile/CentOS/DockerImageReadme.txt
 
 WORKDIR $PSRHOME
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/pulsar_injection_pipeline.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v1.1/Deploy/pulsar_injection_pipeline.zip
 RUN unzip pulsar_injection_pipeline.zip -d $PSRHOME
 RUN rm __MACOSX -R
 RUN rm pulsar_injection_pipeline.zip
@@ -315,25 +315,25 @@ WORKDIR /home
 # each time.
 
 # Download the software
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Presto_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Sigproc_MJK_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v1.1/Deploy/Software/17_05_2017/Presto_SNAPSHOT_08_12_2016.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v1.1/Deploy/Software/17_05_2017/Sigproc_MJK_SNAPSHOT_17_05_2017.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v1.1/Deploy/Software/17_05_2017/Tempo_SNAPSHOT_08_12_2016.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v1.1/Deploy/Software/17_05_2017/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
 
 # Unzip the software
 RUN unzip Presto_SNAPSHOT_08_12_2016.zip -d /home/Presto_SNAPSHOT_08_12_2016
-RUN unzip Sigproc_MJK_SNAPSHOT_08_12_2016.zip -d /home/Sigproc_MJK_SNAPSHOT_08_12_2016
+RUN unzip Sigproc_MJK_SNAPSHOT_17_05_2017.zip -d /home/Sigproc_MJK_SNAPSHOT_17_05_2017
 RUN unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016
 RUN unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016
 
 # Remove zip files
 RUN rm Presto_SNAPSHOT_08_12_2016.zip
-RUN rm Sigproc_MJK_SNAPSHOT_08_12_2016.zip
+RUN rm Sigproc_MJK_SNAPSHOT_17_05_2017.zip
 RUN rm Tempo_SNAPSHOT_08_12_2016.zip
 RUN rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
 
 # Move the software to the correct folder location
-RUN mv /home/Sigproc_MJK_SNAPSHOT_08_12_2016 /home/psr/soft/sigproc
+RUN mv /home/Sigproc_MJK_SNAPSHOT_17_05_2017 /home/psr/soft/sigproc
 RUN mv /home/Presto_SNAPSHOT_08_12_2016 /home/psr/soft/presto
 RUN mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo
 RUN mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2
