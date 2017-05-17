@@ -1,6 +1,6 @@
 **************************************************************************
 |                                                                        |
-|  Test Vector Inject Pulsar Pipeline (version 1.0)                      |
+|  Test Vector Inject Pulsar Pipeline (version 1.1)                      |
 |                                                                        |
 **************************************************************************
 | Author: Rob Lyon                                                       |

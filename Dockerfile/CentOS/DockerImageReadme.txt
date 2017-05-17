@@ -1,6 +1,6 @@
 **************************************************************************
 |                                                                        |
-|  Test vector machine Docker Image (version 1.0)                        |
+|  Test vector machine Docker Image (version 1.1)                        |
 |                                                                        |
 **************************************************************************
 | Author: Rob Lyon                                                       |
@@ -12,6 +12,11 @@ This image sets up an environment with only a basic pulsar stack. This
 is because the image is to be used for test vector generation, for tests
 of SKA SDP and CSP software. For a more complete pulsar image, look at the
 Dockerfile's written by Casey Law, or Maciej Serylak.
+
+Image update based on feedback from Sally Cooper (thanks Sal!). Sally
+found issues with how Mike's version of Sigproc produces file headers
+(filterbank file headers), and with how the software created fake files.
+Both issues should be fixed in this build.
 
 Please note that it takes around 1 hour to build the entire image on the
 dockerhub. Also note that the image size is approximately 2.5 GB on disk.
@@ -60,8 +65,8 @@ Software Package                Version                             Link
 1. Tempo2                       2016.11.3 (SNAPSHOT 08 12 2016)     https://bitbucket.org/psrsoft/tempo2/downloads/tempo2-2016.11.3.tar.gz
                                 Uploaded on 2016-12-05 by MKeith.
 
-2. Sigproc (Mike Keith's build) Latest commit 668de78  on 25 Oct    https://github.com/SixByNine/sigproc
-                                2016 (Master branch)
+2. Sigproc (Mike Keith's build) Latest commit 55e94fa on 6th May    https://github.com/SixByNine/sigproc
+                                2017 (Master branch)
 
 3. Test vector generation code. Commit 91d8472                      https://github.com/scienceguyrob/Docker/blob/master/Resources/Deploy/pulsar_injection_pipeline.zip
 

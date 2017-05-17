@@ -1,4 +1,4 @@
-# SKA-TestVectorGenerationPipeline (version 1.0)
+# SKA-TestVectorGenerationPipeline (version 1.1)
 A software pipeline used to generate SKA like pulsar observations, aka 'test vectors'. These are used to test CSP.PSS modules.
 
 ## Author: Rob Lyon
@@ -128,5 +128,9 @@ Scripts have been written to automate the creation of test vectors. These includ
 
 Versions of pulsar software assumed by these scripts:
     - *Tempo2* version 2014.11.1
-    - *fast_fake* version updated on 29th October 2014, commit 41d05788720577994848c8209b02c7bef02d7ece (see https://github.com/SixByNine/sigproc/blob/master/src/fast_fake.c).
-    - *inject_pulsar* version updated on November 19th 2014, commit 94bb492ddea59ff1d8ef34f06e4f642afd06c4a9 (see https://github.com/SixByNine/sigproc/blob/master/src/inject_pulsar.c)
+    - *fast_fake* version updated on 6th May 2017, Latest commit 55e94fa (Master branch) (see https://github.com/SixByNine/sigproc/blob/master/src/fast_fake.c).
+    - *inject_pulsar* version updated on 6th May 2017, Latest commit 55e94fa (Master branch) (see https://github.com/SixByNine/sigproc/blob/master/src/inject_pulsar.c)
+
+### Change log
+
+***Changes since version 1.0** - Image update based on feedback from Sally Cooper (thanks Sal!). Sally found issues with how Mike's version of Sigproc produces file headers (filterbank file headers), and with how the software created fake files. Both issues should be fixed in this build. This build contains a new build of fast_fake and inject_pulsar. No other differences with respect to version 1.0.
