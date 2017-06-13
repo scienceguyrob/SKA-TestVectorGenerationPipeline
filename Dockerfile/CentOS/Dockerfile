@@ -38,6 +38,7 @@ WORKDIR /home
 ##############################################################################################
 # Install 'OS' software.
 ##############################################################################################
+
 RUN yum -y install epel-release
 RUN yum -y update && yum -y install \
 
@@ -207,7 +208,10 @@ RUN yum -y update && yum -y install \
     # DESCRIPTION:
     # Pip is a replacement for 'easy_install'.
     python-pip \
-    python-devel
+    python-devel \
+
+    # Install tkinter UI library.
+    tkinter
 
     # Install python modules
     RUN pip install --upgrade pip
@@ -384,7 +388,7 @@ RUN ./bootstrap && \
 #RUN make makewisdom
 # Note I have not built PRESTO due to this issue:
 # https://github.com/scottransom/presto/issues/68
-# I can workaround the issue by rmeoving references to the code causing the problem, but I don't
+# I can workaround the issue by removing references to the code causing the problem, but I don't
 # believe that to be a sensible solution. Especially as I'm unsure what consequence that would
 # have. So for now I just inlcude the PRESTO prerequisites and the code. You can build this
 # software from inside the docker container if absolutely necessary.
