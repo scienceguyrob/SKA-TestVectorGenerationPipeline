@@ -436,7 +436,11 @@ class InjectPulsarCommandCreator:
             #
             # Example of how inject_pulsar executes...
             # inject_pulsar --pred t2pred.dat --prof prof.asc file.fil > output.fil
-            command = "inject_pulsar --seed " + str(self.seed) + " --pred " + predictor + " --prof " + value + " " + self.filFilePath + " > output.fil"
+
+            # Rewrite this line to be clearer...
+            outpth = value[value.find('/'):len(value)-4]
+
+            command = "inject_pulsar --seed " + str(self.seed) + " --pred " + predictor + " --prof " + value + " " + self.filFilePath + " > " + outpth + ".fil"
 
             if(self.verbose):
                 print "\tCommand ",command , " : " , command
@@ -481,7 +485,7 @@ class InjectPulsarCommandCreator:
                 print "\tkey: ", key, " value: ", value, " ASC: ", asc
 
             # For fake pulsars, we have a pre-computed target SNR. Here we extract it
-            # from the name of the fakse pulsar, which is in a pre-determined format:
+            # from the name of the fake pulsar, which is in a pre-determined format:
             #
             # FakePulsar_<number>_<period>_<DM>_<SNR>
             #
@@ -514,7 +518,7 @@ class InjectPulsarCommandCreator:
             #
             # Example of how inject_pulsar executes...
             # inject_pulsar --pred t2pred.dat --prof prof.asc file.fil > output.fil
-            command = "inject_pulsar --snr " + SNR + " --seed " + str(self.seed) + " --pred " + value + " --prof " + asc + " " + self.filFilePath + " > output.fil"
+            command = "inject_pulsar --snr " + SNR + " --seed " + str(self.seed) + " --pred " + value + " --prof " + asc + " " + self.filFilePath + " > " + key + ".fil"
 
             if(self.verbose):
                 print "\tCommand ",command , " : " , command
