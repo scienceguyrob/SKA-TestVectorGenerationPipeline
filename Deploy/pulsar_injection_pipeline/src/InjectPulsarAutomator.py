@@ -230,22 +230,58 @@ class InjectPulsarAutomator:
 
             command = line.strip()
 
+            # Execution commands resemble the following:
+            #
+            # inject_pulsar --seed 1 --pred J1032-5911.dat --prof J1032-5911_1382_1.asc Noise.fil > output.fil
+            # inject_pulsar --seed 1 --pred J1428-5530.dat --prof J1428-5530_1382_1.asc Noise.fil > output.fil
+            # inject_pulsar --seed 1 --pred J0849-6322.dat --prof J0849-6322_1374.asc Noise.fil   > output.fil
+            #       ^           ^       ^           ^           ^               ^        ^     ^
+            #       |           |       |           |           |               |        |     |
+            #       |           |       |           |           |               |        |     |
+            #       0           1       2           3           4               5        6     7   INDEXES
+            #
+            #
             commandComponents = line.split()
 
+            # Now extract info from the command
+            seed  = commandComponents[2]
+            dat_file = commandComponents[4]
+            asc_file = commandComponents[6]
+            noise_file = commandComponents[7]
+            output_file = commandComponents[9]
+
+            if self.verbose:
+                print '\n\t+--- Command Details ---+'
+                print '\tSeed: '       , commandComponents[2]
+                print '\t.dat file: '  , commandComponents[4]
+                print '\t.asc file: '  , commandComponents[6]
+                print '\tnoise file: ' , commandComponents[7]
+                print '\toutput file: ', commandComponents[9]
+
+                # Used during debugging
+                #self.clearFile(output_file)
+
+            fname = ntpath.basename(commandComponents[4].replace(".dat",""))
+            ascFileName = ntpath.basename(commandComponents[6].replace(".asc",""))
+
+
             # A command should start with inject_pulsar
-            if(command.startswith("inject_pulsar")):
+            if command.startswith("inject_pulsar"):
 
                 # Execute the command
+
                 process = subprocess.Popen(command, shell=True)
                 process.wait()
 
                 executionCount +=1
 
                 # Check the command file...
-                if(os.path.exists("output.fil") == False):
+                if(os.path.exists(output_file) == False) or os.stat(output_file).st_size == 0:
+                    os.remove(output_file)
                     print "\n\tExecution ",executionCount , " failed to create output file!"
                     executionErrors +=1
                 else:
+
                     # The output file must exist. So here we move it to the output directory
                     # and give it a useful name. To give it a useful name, we need to extract 
                     # a useful name from the execution command.  Execution commands resemble
@@ -267,22 +303,18 @@ class InjectPulsarAutomator:
                     # output file.
 
                     # If there are eight components to the command, we must have a valid command.
-                    if(len(commandComponents) == 10):
+                    if len(commandComponents) == 10:
 
-                        # From indexes shown in comments above, we know that...
-                        fname = ntpath.basename(commandComponents[4].replace(".dat",""))
-                        ascFileName = ntpath.basename(commandComponents[6].replace(".asc",""))
-
-                        if("FakePulsar_" in fname):
+                        if "FakePulsar_" in fname:
                             # We want to retain knowledge of the ASC profile injected into the noise data.
                             destination = self.outputDir + "/" + fname + "_ASC_" + ascFileName + ".fil"
                         else:
                             destination = self.outputDir + "/" + fname + ".fil"
 
-                        copyfile("output.fil", destination)
+                        copyfile(output_file, destination)
 
                         # Check the command file...
-                        if(os.path.exists(destination) == False):
+                        if os.path.exists(destination) == False:
                             print "\n\tExecution ",executionCount , " failed to copy output file!"
                             copyErrors +=1
 
