@@ -1,6 +1,8 @@
 # SKA-TestVectorGenerationPipeline (version 1.0)
 A software pipeline used to generate SKA like pulsar observations, aka 'test vectors'. These are used to test CSP.PSS modules.
 
+[![DOI](https://zenodo.org/badge/84049113.svg)](https://zenodo.org/badge/latestdoi/84049113)
+
 ## Author: Rob Lyon
 ## Email : robert.lyon@manchester.ac.uk
 ## web   : www.scienceguyrob.com
