@@ -352,7 +352,7 @@ RUN ./prepare && \
     make && \
     make install && \
     mv obsys.dat obsys.dat_ORIGINAL && \
-    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/tempo/obsys.dat
+    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/2f15b0d01b922d882b67ec32674d162f41b80377/tempo/obsys.dat
 
 ##############################################################################################
 # TEMPO2 Installation
