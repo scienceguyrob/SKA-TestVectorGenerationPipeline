@@ -369,8 +369,8 @@ WORKDIR $PSRHOME/tempo2/T2runtime/observatory
 RUN mv observatories.dat observatories.dat_ORIGINAL && \
     mv oldcodes.dat oldcodes.dat_ORIGINAL && \
     mv aliases aliases_ORIGINAL && \
-    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/tempo2/observatories.dat && \
-    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/tempo2/aliases
+    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/2f15b0d01b922d882b67ec32674d162f41b80377/tempo2/observatories.dat && \
+    wget https://raw.githubusercontent.com/mserylak/pulsar_docker/2f15b0d01b922d882b67ec32674d162f41b80377/tempo2/aliases
 
 ##############################################################################################
 # Sigproc Installation
