@@ -210,24 +210,25 @@ RUN yum -y install epel-release  && \
     python-devel  && \
 
     # Install python modules
-        pip install --upgrade pip  && \
-        pip install pip -U  && \
-        pip install setuptools -U  && \
-        pip install numpy -U  && \
-        pip install scipy -U  && \
-        pip install fitsio -U  && \
-        pip install astropy -U  && \
-        pip install astroplan -U  && \
-        pip install pyfits -U  && \
-        pip install matplotlib -U  && \
-        pip install pyephem -U  && \
+        pip install --no-cache-dir --upgrade pip  && \
+        pip install --no-cache-dir pip -U  && \
+        pip install --no-cache-dir setuptools -U  && \
+        pip install --no-cache-dir numpy -U  && \
+        pip install --no-cache-dir scipy -U  && \
+        pip install --no-cache-dir fitsio -U  && \
+        pip install --no-cache-dir astropy -U  && \
+        pip install --no-cache-dir astroplan -U  && \
+        pip install --no-cache-dir pyfits -U  && \
+        pip install --no-cache-dir matplotlib -U  && \
+        pip install --no-cache-dir pyephem -U  && \
 
     # First use repo that has PGPLOT
         yum -y localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/updates/6/i386/rpmfusion-free-release-6-1.noarch.rpm https://download1.rpmfusion.org/nonfree/el/updates/6/i386/rpmfusion-nonfree-release-6-1.noarch.rpm && \
 
     # Install PGPLOT.
         yum -y install pgplot && \
-        rm -rf /var/cache/yum/*
+        rm -rf /var/cache/yum/* && \
+        yum clean all 
 
     ##########################################################################################
     #
