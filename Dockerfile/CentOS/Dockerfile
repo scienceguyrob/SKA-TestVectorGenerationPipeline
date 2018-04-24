@@ -38,8 +38,8 @@ WORKDIR /home
 ##############################################################################################
 # Install 'OS' software.
 ##############################################################################################
-RUN yum -y install epel-release
-RUN yum -y update && yum -y install \
+RUN yum -y install epel-release  && \
+    yum -y update && yum -y install \
 
     # **************************************************
     #
@@ -157,7 +157,7 @@ RUN yum -y update && yum -y install \
     # DESCRIPTION:
     # FFTW is a C subroutine library for computing the Discrete Fourier Transform (DFT) in
     # one or more dimensions, of both real and complex data, and of arbitrary input size.
-    fftw-devel
+    fftw-devel  && \
 
     ##########################################################################################
     #
@@ -166,10 +166,10 @@ RUN yum -y update && yum -y install \
     ##########################################################################################
 
     # X11 required by PRESTO
-    RUN yum -y groupinstall "X11"
+        yum -y groupinstall "X11"  && \
 
 
-    RUN yum -y install \
+        yum -y install \
 
     # X11 libraries
     libX11-devel \
@@ -207,26 +207,27 @@ RUN yum -y update && yum -y install \
     # DESCRIPTION:
     # Pip is a replacement for 'easy_install'.
     python-pip \
-    python-devel
+    python-devel  && \
 
     # Install python modules
-    RUN pip install --upgrade pip
-    RUN pip install pip -U
-    RUN pip install setuptools -U
-    RUN pip install numpy -U
-    RUN pip install scipy -U
-    RUN pip install fitsio -U
-    RUN pip install astropy -U
-    RUN pip install astroplan -U
-    RUN pip install pyfits -U
-    RUN pip install matplotlib -U
-    RUN pip install pyephem -U
+        pip install --upgrade pip  && \
+        pip install pip -U  && \
+        pip install setuptools -U  && \
+        pip install numpy -U  && \
+        pip install scipy -U  && \
+        pip install fitsio -U  && \
+        pip install astropy -U  && \
+        pip install astroplan -U  && \
+        pip install pyfits -U  && \
+        pip install matplotlib -U  && \
+        pip install pyephem -U  && \
 
     # First use repo that has PGPLOT
-    RUN yum -y localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/updates/6/i386/rpmfusion-free-release-6-1.noarch.rpm https://download1.rpmfusion.org/nonfree/el/updates/6/i386/rpmfusion-nonfree-release-6-1.noarch.rpm
+        yum -y localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/updates/6/i386/rpmfusion-free-release-6-1.noarch.rpm https://download1.rpmfusion.org/nonfree/el/updates/6/i386/rpmfusion-nonfree-release-6-1.noarch.rpm && \
 
     # Install PGPLOT.
-    RUN yum -y install pgplot
+        yum -y install pgplot && \
+        rm -rf /var/cache/yum/*
 
     ##########################################################################################
     #
@@ -285,22 +286,23 @@ ENV PYTHONPATH=$PYTHONPATH:$PRESTO/lib/python
 ##############################################################################################
 # Download test vector files
 WORKDIR /home
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Dockerfile/CentOS/DockerImageReadme.txt
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Dockerfile/CentOS/DockerImageReadme.txt && \
 
-WORKDIR $PSRHOME
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/pulsar_injection_pipeline.zip
-RUN unzip pulsar_injection_pipeline.zip -d $PSRHOME
-RUN rm __MACOSX -R
-RUN rm pulsar_injection_pipeline.zip
+    cd $PSRHOME && \
+
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/pulsar_injection_pipeline.zip && \
+    unzip pulsar_injection_pipeline.zip -d $PSRHOME && \
+    rm __MACOSX -R && \
+    rm pulsar_injection_pipeline.zip
 
 ##############################################################################################
 # Elmarie van Heerden's Code
 ##############################################################################################
 
-RUN mkdir /home/psr/soft/evh
-WORKDIR $PSRHOME/evh
-RUN wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/Readme_For_Ersartz.txt
-RUN wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/ersatz.py
+RUN mkdir /home/psr/soft/evh && \
+    cd $PSRHOME/evh && \
+    wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/Readme_For_Ersartz.txt && \
+    wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/ersatz.py
 
 ##############################################################################################
 # PULSAR SOFTWARE PIPELINE
@@ -315,33 +317,33 @@ WORKDIR /home
 # each time.
 
 # Download the software
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Presto_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Sigproc_MJK_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Presto_SNAPSHOT_08_12_2016.zip && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Sigproc_MJK_SNAPSHOT_08_12_2016.zip && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
 
 # Unzip the software
-RUN unzip Presto_SNAPSHOT_08_12_2016.zip -d /home/Presto_SNAPSHOT_08_12_2016
-RUN unzip Sigproc_MJK_SNAPSHOT_08_12_2016.zip -d /home/Sigproc_MJK_SNAPSHOT_08_12_2016
-RUN unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016
-RUN unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016
+    unzip Presto_SNAPSHOT_08_12_2016.zip -d /home/Presto_SNAPSHOT_08_12_2016 && \
+    unzip Sigproc_MJK_SNAPSHOT_08_12_2016.zip -d /home/Sigproc_MJK_SNAPSHOT_08_12_2016 && \
+    unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
+    unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
 
 # Remove zip files
-RUN rm Presto_SNAPSHOT_08_12_2016.zip
-RUN rm Sigproc_MJK_SNAPSHOT_08_12_2016.zip
-RUN rm Tempo_SNAPSHOT_08_12_2016.zip
-RUN rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
+    rm Presto_SNAPSHOT_08_12_2016.zip && \
+    rm Sigproc_MJK_SNAPSHOT_08_12_2016.zip && \  
+    rm Tempo_SNAPSHOT_08_12_2016.zip && \
+    rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
 
 # Move the software to the correct folder location
-RUN mv /home/Sigproc_MJK_SNAPSHOT_08_12_2016 /home/psr/soft/sigproc
-RUN mv /home/Presto_SNAPSHOT_08_12_2016 /home/psr/soft/presto
-RUN mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo
-RUN mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2
+    mv /home/Sigproc_MJK_SNAPSHOT_08_12_2016 /home/psr/soft/sigproc && \
+    mv /home/Presto_SNAPSHOT_08_12_2016 /home/psr/soft/presto && \
+    mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
+    mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
 
-RUN rm /home/psr/soft/sigproc/__MACOSX -R
-RUN rm /home/psr/soft/presto/__MACOSX -R
-RUN rm /home/psr/soft/tempo/__MACOSX -R
-RUN rm /home/psr/soft/tempo2/__MACOSX -R
+    rm /home/psr/soft/sigproc/__MACOSX -R && \
+    rm /home/psr/soft/presto/__MACOSX -R && \
+    rm /home/psr/soft/tempo/__MACOSX -R && \
+    rm /home/psr/soft/tempo2/__MACOSX -R
 
 ##############################################################################################
 # TEMPO Installation
