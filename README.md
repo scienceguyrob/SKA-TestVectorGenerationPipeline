@@ -14,6 +14,8 @@ This repository consists of,
 * Data used to support the generation of test vectors.
 * Python scripts which automate the generation of test vectors.
 
+Note that during the recent [Astron Hackathon](http://astron.nl/hackathon/#), improvements were made to the pipeline and it's containerisation. Big thanks to Yan Grange, Sophie Ashcroft, Liam Conner, Wietze Albers, Anne Archibald, and Amruta Jaodand for contributing! These changes will be fully implemented and the repository updated soon.
+
 ### Docker File
 The docker file sets up a software environment with a basic pulsar stack. This image is designed to be used for test vector generation, i.e., the generation of gold standard test vectors used to test software written for the SKA (SDP and CSP software). The image is not intended to provide a useful pulsar software stack. For a more complete pulsar image, please look at the Dockerfile's written by Casey Law, or Maciej Serylak. These can be found on the docker hub.
 
