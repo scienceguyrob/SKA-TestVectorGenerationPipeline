@@ -4,3 +4,4 @@
 .gitignore
 .idea/
 SKA-TestVectorGenerationPipeline.iml
+/Documentation.docx

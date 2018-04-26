@@ -1,20 +1,20 @@
 **************************************************************************
 |                                                                        |
-|  Test vector machine Docker Image (version 1.0)                        |
+|  Test vector machine Docker Image (version 1.1)                        |
 |                                                                        |
 **************************************************************************
-| Author: Rob Lyon                                                       |
+| Author: Rob Lyon, Yan Grange, Wietze Albers                            |
 | Email : robert.lyon@manchester.ac.uk                                   |
 | web   : www.scienceguyrob.com                                          |
 **************************************************************************
 
 This image sets up an environment with only a basic pulsar stack. This
 is because the image is to be used for test vector generation, for tests
-of SKA SDP and CSP software. For a more complete pulsar image, look at the
-Dockerfile's written by Casey Law, or Maciej Serylak.
+of the SKA's SDP and CSP software. For a more complete pulsar image, look
+at the Dockerfile's written by Casey Law, or Maciej Serylak.
 
 Please note that it takes around 1 hour to build the entire image on the
-dockerhub. Also note that the image size is approximately 2.5 GB on disk.
+dockerhub.
 
 **************************************************************************
 
@@ -36,19 +36,7 @@ OS PACKAGES INSTALLED:
 12. cfitsio         3.370
 13. cfitsio-devel   3.370
 14. fftw-devel      3.3.3
-15. glibc           2.17
-16. glibc-devel     2.17
 
-PYTHON MODULES (Python 2.7):
-
-1. numpy
-2. scipy
-3. fitsio
-4. astropy
-5. astroplan
-6. pyfits
-7. matplotlib
-8. pyephem
 
 PULSAR SOFTWARE:
 
@@ -69,11 +57,33 @@ Software Package                Version                             Link
    inserts non-stationary noise and
    RFI into filterbank files.
 
-5. PRESTO                       Commit bd3c0181                     https://github.com/scottransom/presto
-
-6. Tempo                        (Master branch) SNAPSHOT 08 12      https://sourceforge.net/p/tempo/tempo/ci/master/tree/
+5. Tempo                        (Master branch) SNAPSHOT 08 12      https://sourceforge.net/p/tempo/tempo/ci/master/tree/
                                 2016
 
-OTHER SOFTWARE:
+Changes since version 1.0
 
-1. CUDA version 8.0
+Removed:
+
+1. CUDA version 8.0 as it wasn't being used. We can put Cuda back in if necessary.
+2. Install of PRESTO (Commit bd3c0181) due to this issue: https://github.com/scottransom/presto/issues/68
+3. Removed PRESTO dependencies to reduce the image size. This includes,
+
+    3.1. numpy
+    3.2. scipy
+    3.3. fitsio
+    3.4. astropy
+    3.5. astroplan
+    3.6. pyfits
+    3.7. matplotlib
+    3.8. pyephem
+    3.9. PGPlot
+    3.10 X11
+    3.11 libX11-devel
+    3.12 libpng
+    3.13 libpng-devel
+    3.14 glibc
+    3.15 glibc-devel
+    3.16 glib2
+    3.17 glib2-devel
+    3.18 python-pip
+    3.19 python-devel

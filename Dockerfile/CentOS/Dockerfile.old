@@ -1,8 +1,8 @@
 ##############################################################################################
 # Purpose   : Dockerize Components of Pulsar software stack.
 # Python    : 2.7
-# Version   : 1.1
-# Author    : Rob Lyon (robert.lyon@manchester.ac.uk), Rob Lyon, Yan Grange, Wietze Albers .
+# Version   : 0.1
+# Author    : Rob Lyon (robert.lyon@manchester.ac.uk)
 ##############################################################################################
 #
 # This docker file will setup an environment with only a basic pulsar stack. This
@@ -20,6 +20,7 @@
 # 5. python 2.7
 # 6. fftw 3
 # 7. dev tools (gfortran etc.)
+# 8. PRESTO is not compiled due to an error: https://github.com/scottransom/presto/issues/68
 #
 # Please see DockerImageReadme.txt for software version information.
 ##############################################################################################
@@ -157,12 +158,82 @@ RUN yum -y install epel-release  && \
     # DESCRIPTION:
     # FFTW is a C subroutine library for computing the Discrete Fourier Transform (DFT) in
     # one or more dimensions, of both real and complex data, and of arbitrary input size.
-    fftw-devel
-
+    fftw-devel  && \
 
     ##########################################################################################
     #
     # ALL THE SOFTWARE LISTED SO FAR IS REQUIRED TO BUILD SIGPROC
+    #
+    ##########################################################################################
+
+    # X11 required by PRESTO
+    yum -y groupinstall "X11"  && \
+
+
+    yum -y install \
+
+    # X11 libraries
+    libX11-devel \
+
+    # VERSION: 1.5.13
+    # LINK: https://pkgs.org/centos-7/centos-x86_64/libpng-1.5.13-7.el7_2.i686.rpm.html
+    #
+    # DESCRIPTION:
+    # The libpng package contains a library of functions for creating and manipulating
+    # PNG (Portable Network Graphics) image format files.
+    libpng \
+    libpng-devel \
+
+    # VERSION: 2.17
+    # LINK: https://pkgs.org/centos-7/centos-x86_64/glibc-2.17-105.el7.i686.rpm.html
+    #
+    # DESCRIPTION:
+    # The glibc package contains standard libraries which are used by multiple programs
+    # on the system.
+    glibc \
+    glibc-devel \
+
+    # VERSION: 2.46.2
+    # LINK: https://pkgs.org/centos-7/centos-x86_64/glib2-2.46.2-4.el7.i686.rpm.html
+    #
+    # DESCRIPTION:
+    # GLib is the low-level core library that forms the basis for projects such as
+    # GTK+ and GNOME.
+    glib2 \
+    glib2-devel \
+
+    # VERSION: 7.1.0
+    # LINK: https://pkgs.org/centos-7/epel-x86_64/python-pip-7.1.0-1.el7.noarch.rpm.html
+    #
+    # DESCRIPTION:
+    # Pip is a replacement for 'easy_install'.
+    python-pip \
+    python-devel  && \
+
+    # Install python modules
+        pip install --no-cache-dir --upgrade pip  && \
+        pip install --no-cache-dir pip -U  && \
+        pip install --no-cache-dir setuptools -U  && \
+        pip install --no-cache-dir numpy -U  && \
+        pip install --no-cache-dir scipy -U  && \
+        pip install --no-cache-dir fitsio -U  && \
+        pip install --no-cache-dir astropy -U  && \
+        pip install --no-cache-dir astroplan -U  && \
+        pip install --no-cache-dir pyfits -U  && \
+        pip install --no-cache-dir matplotlib -U  && \
+        pip install --no-cache-dir pyephem -U  && \
+
+    # First use repo that has PGPLOT
+        yum -y localinstall --nogpgcheck https://download1.rpmfusion.org/free/el/updates/6/i386/rpmfusion-free-release-6-1.noarch.rpm https://download1.rpmfusion.org/nonfree/el/updates/6/i386/rpmfusion-nonfree-release-6-1.noarch.rpm && \
+
+    # Install PGPLOT.
+        yum -y install pgplot && \
+        rm -rf /var/cache/yum/* && \
+        yum clean all 
+
+    ##########################################################################################
+    #
+    # ALL THE SOFTWARE LISTED SO FAR IS REQUIRED TO BUILD PRESTO
     #
     ##########################################################################################
 
@@ -206,6 +277,12 @@ ENV F77=gfortran
 ENV CC=gcc
 ENV CXX=g++
 
+# PRESTO
+ENV PRESTO=$PSRHOME/presto
+ENV PATH=$PATH:$PRESTO/bin
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PRESTO/lib
+ENV PYTHONPATH=$PYTHONPATH:$PRESTO/lib/python
+
 ##############################################################################################
 # TEST VECTOR PIPELINE + README Setup
 ##############################################################################################
@@ -242,27 +319,31 @@ WORKDIR /home
 # each time.
 
 # Download the software
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Sigproc_MJK_SNAPSHOT_08_12_2016.zip && \
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Presto_SNAPSHOT_08_12_2016.zip && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Sigproc_MJK_SNAPSHOT_08_12_2016.zip && \
     wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip && \
     wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Deploy/Software/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
 
 # Unzip the software
+    unzip Presto_SNAPSHOT_08_12_2016.zip -d /home/Presto_SNAPSHOT_08_12_2016 && \
     unzip Sigproc_MJK_SNAPSHOT_08_12_2016.zip -d /home/Sigproc_MJK_SNAPSHOT_08_12_2016 && \
     unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
     unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
 
 # Remove zip files
+    rm Presto_SNAPSHOT_08_12_2016.zip && \
     rm Sigproc_MJK_SNAPSHOT_08_12_2016.zip && \  
     rm Tempo_SNAPSHOT_08_12_2016.zip && \
     rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
 
 # Move the software to the correct folder location
     mv /home/Sigproc_MJK_SNAPSHOT_08_12_2016 /home/psr/soft/sigproc && \
+    mv /home/Presto_SNAPSHOT_08_12_2016 /home/psr/soft/presto && \
     mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
     mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
 
-# Remove files which appear due to me packaging on a MAC.
     rm /home/psr/soft/sigproc/__MACOSX -R && \
+    rm /home/psr/soft/presto/__MACOSX -R && \
     rm /home/psr/soft/tempo/__MACOSX -R && \
     rm /home/psr/soft/tempo2/__MACOSX -R
 
@@ -307,13 +388,26 @@ RUN ./bootstrap && \
     make && \
     make install
 
-
+##############################################################################################
+# PRESTO Installation
+##############################################################################################
+WORKDIR $PRESTO/src
 # Note I have not built PRESTO due to this issue:
 # https://github.com/scottransom/presto/issues/68
-# I can workaround the issue by removing references to the code causing the problem, but I don't
+# I can workaround the issue by rmeoving references to the code causing the problem, but I don't
 # believe that to be a sensible solution. Especially as I'm unsure what consequence that would
-# have. You can build this software from inside the docker container if absolutely necessary.
-# However I have removed the PRESTO pre-requisites to make the pipeline image smaller.
+# have. So for now I just inlcude the PRESTO prerequisites and the code. You can build this
+# software from inside the docker container if absolutely necessary.
+
+#RUN make makewisdom
+#RUN make prep && \
+#    make
+#WORKDIR $PRESTO/python/ppgplot_src
+#RUN mv _ppgplot.c _ppgplot.c_ORIGINAL && \
+    #wget https://raw.githubusercontent.com/mserylak/pulsar_docker/master/ppgplot/_ppgplot.c
+#WORKDIR $PRESTO/python
+#RUN make
+
 
 ##############################################################################################
 # Finally...

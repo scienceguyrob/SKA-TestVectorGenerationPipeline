@@ -374,7 +374,7 @@ class CandidateParGenerator:
 
     or for fake pulsar examples,
 
-    FakePulsar_<number>_<DM>_<Period (ms)>_<SNR>.par
+    FakePulsar_<number>_<Period (s)>_<DM>_<SNR>.par
 
     Running this code will overwrite existing par files for both pulsar
     and non-pulsar examples if automatically generated file names match

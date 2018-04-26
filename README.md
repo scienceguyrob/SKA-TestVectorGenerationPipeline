@@ -1,4 +1,4 @@
-# SKA-TestVectorGenerationPipeline (version 1.0)
+# SKA-TestVectorGenerationPipeline (version 1.1)
 A software pipeline used to generate SKA like pulsar observations, aka 'test vectors'. These are used to test CSP.PSS modules.
 
 [![DOI](https://zenodo.org/badge/84049113.svg)](https://zenodo.org/badge/latestdoi/84049113)
@@ -19,9 +19,9 @@ Note that during the recent [Astron Hackathon](http://astron.nl/hackathon/#), im
 ### Docker File
 The docker file sets up a software environment with a basic pulsar stack. This image is designed to be used for test vector generation, i.e., the generation of gold standard test vectors used to test software written for the SKA (SDP and CSP software). The image is not intended to provide a useful pulsar software stack. For a more complete pulsar image, please look at the Dockerfile's written by Casey Law, or Maciej Serylak. These can be found on the docker hub.
 
-Please note that it takes around 1 hour to build this image on the dockerhub. Also note that the image size is approximately 2.5 GB on disk. It is probably best to build locally on your own machine. The image can lso be found on the docker hub:
+Please note that it takes around 1 hour to build this image on the dockerhub. Also note that the image size is approximately 1 GB on disk. It is probably best to build locally on your own machine. The image can lso be found on the docker hub:
 
-https://hub.docker.com/r/scienceguyrob/docker/
+https://hub.docker.com/r/scienceguyrob/ska-test-vectors/
 
 #### Docker Image Software
 
@@ -43,21 +43,6 @@ Image OS PACKAGES INSTALLED:
 |12.| cfitsio | 3.370 |
 |13.| cfitsio-devel | 3.370 |
 |14.| fftw-devel | 3.3.3 |
-|15.| glibc | 2.17 |
-|16.| glibc-devel | 2.17 |
-
-##### PYTHON MODULES (Python 2.7):
-
-| Number | Package |
-|--- | --- |
-|1. | numpy |
-|2. | scipy |
-|3. | fitsio |
-|4. | astropy |
-|5. | astroplan |
-|6. | pyfits |
-|7. | matplotlib |
-|8. | pyephem |
 
 ##### PULSAR SOFTWARE
 
@@ -71,8 +56,7 @@ The software can be found in: /home/psr/soft
 | 2. | Sigproc | (Mike Keith's build) Latest commit 668de78  on 25 Oct 2016 (Master branch) | [Link](https://github.com/SixByNine/sigproc)|
 | 3. | Test vector generation code. | Commit 91d8472 | [Link](https://github.com/scienceguyrob/Docker/blob/master/Resources/Deploy/pulsar_injection_pipeline.zip) |
 | 4. | Elmarie van Heerden's code that inserts non-stationary noise and RFI into filterbank files. |N/A |N/A |
-| 5. | PRESTO | Commit bd3c0181 | [Link](https://github.com/scottransom/presto) |
-| 6. | Tempo | (Master branch) SNAPSHOT 08 12 2016 | [Link](https://sourceforge.net/p/tempo/tempo/ci/master/tree/) |
+| 5. | Tempo | (Master branch) SNAPSHOT 08 12 2016 | [Link](https://sourceforge.net/p/tempo/tempo/ci/master/tree/) |
 
 ### Data
 
@@ -134,3 +118,31 @@ Versions of pulsar software assumed by these scripts:
     - *Tempo2* version 2014.11.1
     - *fast_fake* version updated on 29th October 2014, commit 41d05788720577994848c8209b02c7bef02d7ece (see https://github.com/SixByNine/sigproc/blob/master/src/fast_fake.c).
     - *inject_pulsar* version updated on November 19th 2014, commit 94bb492ddea59ff1d8ef34f06e4f642afd06c4a9 (see https://github.com/SixByNine/sigproc/blob/master/src/inject_pulsar.c)
+
+Changes since version 1.0
+
+Removed:
+
+1. CUDA version 8.0 as it wasn't being used. We can put Cuda back in if necessary.
+2. Install of PRESTO (Commit bd3c0181) due to this issue: https://github.com/scottransom/presto/issues/68
+3. Removed PRESTO dependencies to reduce the image size. This includes,
+
+    3.1. numpy
+    3.2. scipy
+    3.3. fitsio
+    3.4. astropy
+    3.5. astroplan
+    3.6. pyfits
+    3.7. matplotlib
+    3.8. pyephem
+    3.9. PGPlot
+    3.10 X11
+    3.11 libX11-devel
+    3.12 libpng
+    3.13 libpng-devel
+    3.14 glibc
+    3.15 glibc-devel
+    3.16 glib2
+    3.17 glib2-devel
+    3.18 python-pip
+    3.19 python-devel
