@@ -127,22 +127,22 @@ Removed:
 2. Install of PRESTO (Commit bd3c0181) due to this issue: https://github.com/scottransom/presto/issues/68
 3. Removed PRESTO dependencies to reduce the image size. This includes,
 
-    3.1. numpy
-    3.2. scipy
-    3.3. fitsio
-    3.4. astropy
-    3.5. astroplan
-    3.6. pyfits
-    3.7. matplotlib
-    3.8. pyephem
-    3.9. PGPlot
-    3.10 X11
-    3.11 libX11-devel
-    3.12 libpng
-    3.13 libpng-devel
-    3.14 glibc
-    3.15 glibc-devel
-    3.16 glib2
-    3.17 glib2-devel
-    3.18 python-pip
-    3.19 python-devel
+    * numpy
+    * scipy
+    * fitsio
+    * astropy
+    * astroplan
+    * pyfits
+    * matplotlib
+    * pyephem
+    * PGPlot
+    * X11
+    * libX11-devel
+    * libpng
+    * libpng-devel
+    * glibc
+    * glibc-devel
+    * glib2
+    * glib2-devel
+    * python-pip
+    * python-devel
