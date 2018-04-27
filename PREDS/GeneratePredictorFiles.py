@@ -380,7 +380,7 @@ class GeneratePredictorFiles:
                             batchEntryCount+=1
 
                             #                                                  MJD 1  MJD2 FCH1 FCHN
-                            tempo2Command = "tempo2 -f " + path + " -pred \"@ "+self.mjd1+" "+self.mjd2+" "+ str(self.f1) + " " +\
+                            tempo2Command = "tempo2 -f " + path + " -pred \"meerkat "+self.mjd1+" "+self.mjd2+" "+ str(self.f1) + " " +\
                                             str(self.f2) + " " + str(self.tcoeff) + " " + str(self.fcoeff) + " " + str(self.obsLength)+"\""
 
                             # Now try to execute the tempo2 command...
