@@ -159,12 +159,22 @@ RUN yum -y install epel-release  && \
     # one or more dimensions, of both real and complex data, and of arbitrary input size.
     fftw-devel
 
-
     ##########################################################################################
     #
     # ALL THE SOFTWARE LISTED SO FAR IS REQUIRED TO BUILD SIGPROC
     #
     ##########################################################################################
+
+RUN yum -y install \
+    python-pip \
+    python-devel  && \
+
+    # Install python modules
+    pip install --no-cache-dir --upgrade pip  && \
+    pip install --no-cache-dir pip -U  && \
+    pip install --no-cache-dir setuptools -U  && \
+    pip install --no-cache-dir numpy -U
+
 
 ##############################################################################################
 # Setup environment variables
