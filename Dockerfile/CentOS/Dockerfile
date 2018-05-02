@@ -175,8 +175,10 @@ RUN yum -y install \
     pip install --no-cache-dir setuptools -U  && \
     pip install --no-cache-dir numpy -U && \
     pip install --no-cache-dir scipy -U  && \
-    pip install --no-cache-dir matplotlib -U
+    pip install --no-cache-dir matplotlib -U && \
+    pip install --no-cache-dir pyephem -U
 
+RUN yum -y install tkinter
 
 ##############################################################################################
 # Setup environment variables

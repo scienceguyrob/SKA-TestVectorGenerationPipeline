@@ -19,7 +19,7 @@ Pulsar      -   This directory contains predictor files for real pulsars. The
                 tempo2 -f <path to pulsar par> -pred "@ 56000 56001 1350 1670 12 2 600"
 
                 Note it is probably advisable to replace the "@" symbol with a
-                real telescope name.
+                real telescope name, e.g. PKS, MEERKAT, SKA etc.
 
                 Note that Tempo2 version 2014.11.1 was used.
 

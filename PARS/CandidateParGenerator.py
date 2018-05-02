@@ -1179,25 +1179,25 @@ class CandidateParGenerator:
 
         # Now check data has been generated correctly
         canProceed = True
-        if(len(generatedPeriods)==1000):
+        if(len(generatedPeriods)==self.samples):
             print "\n\n\tAll period data generated"
         else:
             print "\n\n\tNot all period data generated!"
             canProceed = False
 
-        if(len(generatedDMs)==1000):
+        if(len(generatedDMs)==self.samples):
             print "\n\n\tAll DM data generated"
         else:
             print "\n\n\tNot all DM data generated!"
             canProceed = False
 
-        if(len(generatedDutyCycles)==1000):
+        if(len(generatedDutyCycles)==self.samples):
             print "\n\n\tAll duty cycle data generated"
         else:
             print "\n\n\tNot all duty cycle data generated!"
             canProceed = False
 
-        if(len(generatedSNRs)==1000):
+        if(len(generatedSNRs)==self.samples):
             print "\n\n\tAll S/N data generated"
         else:
             print "\n\n\tNot all S/N data generated!"
