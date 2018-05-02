@@ -173,7 +173,9 @@ RUN yum -y install \
     pip install --no-cache-dir --upgrade pip  && \
     pip install --no-cache-dir pip -U  && \
     pip install --no-cache-dir setuptools -U  && \
-    pip install --no-cache-dir numpy -U
+    pip install --no-cache-dir numpy -U && \
+    pip install --no-cache-dir scipy -U  && \
+    pip install --no-cache-dir matplotlib -U
 
 
 ##############################################################################################
