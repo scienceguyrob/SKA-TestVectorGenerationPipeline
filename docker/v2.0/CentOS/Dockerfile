@@ -323,7 +323,7 @@ RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/dspsr_SNAPSHOT_30_04_2019.zip
 
 # Unzip the software
-RUN unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/Sigproc_MJK_SNAPSHOT_30_04_2019 && \
+RUN unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/sigproc && \
     unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
     unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
     unzip psrchive_SNAPSHOT_30_04_2019.zip -d /home/psrchive_SNAPSHOT_30_04_2019 && \
@@ -337,7 +337,7 @@ RUN unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/Sigproc_MJK_SNAPSHOT_30_0
     rm dspsr_SNAPSHOT_30_04_2019.zip && \
 
 # Move the software to the correct folder location
-    mv /home/Sigproc_MJK_SNAPSHOT_30_04_2019 /home/psr/soft/sigproc && \
+    mv /home/sigproc /home/psr/soft/sigproc && \
     mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
     mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
     mv /home/psrchive_SNAPSHOT_30_04_2019 /home/psr/soft/psrchive && \
@@ -383,11 +383,11 @@ RUN mv observatories.dat observatories.dat_ORIGINAL && \
 # Ok here we install sigproc - This is Mike Keith's version of Sigproc, which comes with the
 # fast_fake utility. First we set the environment variables for the install, then execute the
 # building steps.
-WORKDIR $SIGPROC
-RUN ./bootstrap && \
-    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
-    make && \
-    make install
+#WORKDIR $SIGPROC
+#RUN ./bootstrap && \
+#    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
+#    make && \
+#    make install
 
 ##############################################################################################
 # Psrchive Installation
