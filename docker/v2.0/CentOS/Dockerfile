@@ -383,11 +383,11 @@ RUN mv observatories.dat observatories.dat_ORIGINAL && \
 # Ok here we install sigproc - This is Mike Keith's version of Sigproc, which comes with the
 # fast_fake utility. First we set the environment variables for the install, then execute the
 # building steps.
-WORKDIR $SIGPROC
-RUN ./bootstrap && \
-    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
-    make && \
-    make install
+#WORKDIR $SIGPROC
+#RUN ./bootstrap && \
+#    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
+#    make && \
+ #   make install
 
 ##############################################################################################
 # Psrchive Installation
