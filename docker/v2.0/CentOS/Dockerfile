@@ -38,6 +38,9 @@ MAINTAINER robert.lyon@manchester.ac.uk
 # exist, it will be created even if it’s not used in any subsequent Dockerfile instruction.
 WORKDIR /home
 
+# Required as user in base image set to something other than root.
+USER root
+
 ##############################################################################################
 # Install 'OS' software.
 ##############################################################################################
@@ -168,7 +171,7 @@ RUN yum -y install epel-release  && \
     # DESCRIPTION:
     # The PGPLOT Graphics Subroutine Library is a Fortran- or C-callable,
     # device-independent graphics package for making simple scientific graphs.
-    pgplot\
+    pgplot
 
     # Install these to enable building python 3.7
     #openssl-devel\
@@ -194,7 +197,7 @@ RUN yum -y install \
     pip install --no-cache-dir matplotlib -U && \
     pip install --no-cache-dir pyephem -U
 
-RUN yum -y install tkinter
+#RUN yum -y install tkinter
 
 ##############################################################################################
 # Setup environment variables
@@ -266,7 +269,7 @@ RUN mkdir $PIPELINE_V1
 WORKDIR $PIPELINE_V1
 
 RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/v1.0/inject_pulsar_pipeline_readme.txt
-RUN https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v1.0/CentOS/DockerImageReadme.txt
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v1.0/CentOS/DockerImageReadme.txt
 
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/pulsar_injection_pipeline_v1.0.zip && \
     unzip pulsar_injection_pipeline_v1.0.zip -d $PIPELINE_V1 && \
@@ -280,9 +283,8 @@ RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v
 RUN mkdir $PIPELINE_BETA
 WORKDIR $PIPELINE_BETA
 
-RUN https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
-RUN https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/Filename_Standards.md
-RUN https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v2.0/CentOS/DockerImageReadme.md
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v2.0/CentOS/DockerImageReadme.md
 
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/beta_pipeline_v2.0.zip && \
     unzip beta_pipeline_v2.0.zip -d $PIPELINE_BETA && \
@@ -293,17 +295,17 @@ RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v
 # Elmarie van Heerden's Code
 ##############################################################################################
 
-#WORKDIR $PSRHOME
+WORKDIR $PSRHOME
 
-#RUN mkdir /home/psr/soft/evh && \
-#    cd $PSRHOME/evh && \
-#    wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/Readme_For_Ersartz.txt && \
-#    wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/ersatz.py
+RUN mkdir /home/psr/soft/evh && \
+    cd $PSRHOME/evh && \
+    wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/Readme_For_Ersartz.txt && \
+    wget https://raw.githubusercontent.com/EllieVanH/PulsarDetectionLibrary/master/ersatz.py
 
 ##############################################################################################
 # PULSAR SOFTWARE
 ##############################################################################################
-#WORKDIR /home
+WORKDIR /home
 
 # Downloading pulsar software source codes. Here I've tried to version the software
 # used, so we know all about our container environment. However some of the pulsar tools
@@ -314,68 +316,66 @@ RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v
 
 # Download the software
 
-#RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/Sigproc_MJK_SNAPSHOT_30_04_2019.zip
-#RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip
-#RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
-#RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/psrchive_SNAPSHOT_30_04_2019.zip
-#RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/dspsr_SNAPSHOT_30_04_2019.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/Sigproc_MJK_SNAPSHOT_30_04_2019.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/psrchive_SNAPSHOT_30_04_2019.zip
+RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/dspsr_SNAPSHOT_30_04_2019.zip
 
 # Unzip the software
-#RUN unzip Sigproc_MJK_SNAPSHOT_08_12_2016.zip -d /home/Sigproc_MJK_SNAPSHOT_30_04_2019 && \
-#    unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
-#    unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
-#    unzip psrchive_SNAPSHOT_30_04_2019.zip -d /home/psrchive_SNAPSHOT_30_04_2019 && \
-#    unzip dspsr_SNAPSHOT_30_04_2019.zip -d /home/dspsr_SNAPSHOT_30_04_2019 && \
+RUN unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/Sigproc_MJK_SNAPSHOT_30_04_2019 && \
+    unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
+    unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
+    unzip psrchive_SNAPSHOT_30_04_2019.zip -d /home/psrchive_SNAPSHOT_30_04_2019 && \
+    unzip dspsr_SNAPSHOT_30_04_2019.zip -d /home/dspsr_SNAPSHOT_30_04_2019 && \
 
 # Remove zip files
-#    rm Sigproc_MJK_SNAPSHOT_08_12_2016.zip && \
-#    rm Tempo_SNAPSHOT_08_12_2016.zip && \
-#    rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
-#    rm psrchive_SNAPSHOT_30_04_2019.zip && \
-#    rm dspsr_SNAPSHOT_30_04_2019.zip && \
+    rm Sigproc_MJK_SNAPSHOT_30_04_2019.zip && \
+    rm Tempo_SNAPSHOT_08_12_2016.zip && \
+    rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
+    rm psrchive_SNAPSHOT_30_04_2019.zip && \
+    rm dspsr_SNAPSHOT_30_04_2019.zip && \
 
 # Move the software to the correct folder location
-#    mv /home/Sigproc_MJK_SNAPSHOT_08_12_2016 /home/psr/soft/sigproc && \
-#    mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
-#    mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
-#    mv /home/psrchive_SNAPSHOT_30_04_2019 /home/psr/soft/psrchive && \
-#    mv /home/dspsr_SNAPSHOT_30_04_2019.zip /home/psr/soft/dspsr && \
+    mv /home/Sigproc_MJK_SNAPSHOT_30_04_2019 /home/psr/soft/sigproc && \
+    mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
+    mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
+    mv /home/psrchive_SNAPSHOT_30_04_2019 /home/psr/soft/psrchive && \
+    mv /home/dspsr_SNAPSHOT_30_04_2019 /home/psr/soft/dspsr && \
 
 # Remove files which appear due to me packaging on a Mac.
-#    rm /home/psr/soft/sigproc/__MACOSX -R && \
-#    rm /home/psr/soft/tempo/__MACOSX -R && \
-#    rm /home/psr/soft/tempo2/__MACOSX -R
-#    rm /home/psr/soft/psrchive/__MACOSX -R
-#    rm /home/psr/soft/dspsr/__MACOSX -R
+    rm /home/psr/soft/sigproc/__MACOSX -R && \
+    rm /home/psr/soft/tempo/__MACOSX -R && \
+    rm /home/psr/soft/tempo2/__MACOSX -R
 
 ##############################################################################################
 # TEMPO Installation
 ##############################################################################################
-#WORKDIR $PSRHOME/tempo
-#RUN ./prepare && \
-#    ./configure --prefix=$PSRHOME/tempo && \
-#    make && \
-#   make install && \
-#   mv obsys.dat obsys.dat_ORIGINAL && \
-#   wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/obsys.dat
+WORKDIR $PSRHOME/tempo
+RUN ./prepare
+RUN ./configure --prefix=$PSRHOME/tempo
+RUN make
+RUN make install
+RUN mv obsys.dat obsys.dat_ORIGINAL && \
+    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/obsys.dat
 
 ##############################################################################################
 # TEMPO2 Installation
 ##############################################################################################
 # Ok here we install the latest version of TEMPO2.
 
-#WORKDIR $PSRHOME/tempo2
-#RUN ./bootstrap && \
-#    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
-#    make && \
-#    make install && \
-#    make plugins-install
-#WORKDIR $PSRHOME/tempo2/T2runtime/observatory
-#RUN mv observatories.dat observatories.dat_ORIGINAL && \
-#    mv oldcodes.dat oldcodes.dat_ORIGINAL && \
-#    mv aliases aliases_ORIGINAL && \
-#    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/observatories.dat && \
-#    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/aliases
+WORKDIR $PSRHOME/tempo2
+RUN ./bootstrap && \
+    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
+    make && \
+    make install && \
+    make plugins-install
+WORKDIR $PSRHOME/tempo2/T2runtime/observatory
+RUN mv observatories.dat observatories.dat_ORIGINAL && \
+    mv oldcodes.dat oldcodes.dat_ORIGINAL && \
+    mv aliases aliases_ORIGINAL && \
+    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/observatories.dat && \
+    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/aliases
 
 ##############################################################################################
 # Sigproc Installation
@@ -383,11 +383,11 @@ RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v
 # Ok here we install sigproc - This is Mike Keith's version of Sigproc, which comes with the
 # fast_fake utility. First we set the environment variables for the install, then execute the
 # building steps.
-#WORKDIR $SIGPROC
-#RUN ./bootstrap && \
-#    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
-#    make && \
-#    make install
+WORKDIR $SIGPROC
+RUN ./bootstrap && \
+    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
+    make && \
+    make install
 
 ##############################################################################################
 # Psrchive Installation
