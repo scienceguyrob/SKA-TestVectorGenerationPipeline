@@ -227,7 +227,7 @@ ENV CXX=g++
 ##############################################################################################
 # Download test vector files
 WORKDIR /home
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/
+RUN https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/Readme_v2.0.md
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/master/Dockerfile/v2.0/CentOS/DockerImageReadme.md && \
 
     cd $PSRHOME && \
