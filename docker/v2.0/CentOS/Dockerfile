@@ -308,9 +308,12 @@ WORKDIR $PIPELINE_BETA
 RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
 RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v2.0/CentOS/DockerImageReadme.md && \
     wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/beta_pipeline_v2.0.zip && \
-    unzip beta_pipeline_v2.0.zip -d $PIPELINE_BETA && \
-    rm __MACOSX -R && \
+    unzip beta_pipeline_v2.0.zip -d beta_pipeline_v2.0 && \
+    rm beta_pipeline_v2.0/__MACOSX -R && \
     rm beta_pipeline_v2.0.zip
+
+RUN mv /home/psr/soft/tvp/beta/beta_pipeline_v2.0/beta/Filename_Standards.md /home/psr/soft/tvp/beta/Filename_Standards.md && \
+    cp /home/psr/soft/tvp/beta/beta_pipeline_v2.0/beta/main/src /home/psr/soft/tvp/beta/src -R
 
 ##############################################################################################
 # Elmarie van Heerden's Code
