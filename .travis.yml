@@ -4,4 +4,4 @@ services:
    - docker
 
 script:
-  - travis_wait 120 sleep infinity & docker build Dockerfile/CentOS
+  - travis_wait 120 sleep infinity & docker build docker/v2.0/CentOS
