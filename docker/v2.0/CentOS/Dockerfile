@@ -1,33 +1,46 @@
 ##############################################################################################
-# Purpose   : Dockerize Components of Pulsar software stack.
+# Purpose   : Dockerize Components of Pulsar test vector generation software stack.
 # Python    : 3.6
 # Version   : 2.0
 # Author    : Rob Lyon (robert.lyon@manchester.ac.uk), Rob Lyon, Yan Grange, Wietze Albers .
 ##############################################################################################
 #
-# This docker file will setup an environment with only a basic pulsar stack. This
-# is because the image is to be used for test vector generation, for tests of the SKA's
-# SDP and CSP software. For a more complete pulsar image, look at the Dockerfile's
-# written by Casey Law, or Maciej Serylak. I've documented this Dockerfile which I
-# hope makes it's content easier to understand.
+# This docker file sets up a basic test vector generation pipeline environment. It inlcudes
+# only a minimal subset of pulsar community software. For a more complete pulsar image, please
+# look at the excellent Dockerfile's written by,
 #
-# SOFTWARE:
+# Casey Law: https://github.com/caseyjlaw/docker-psr
+# Ewan Barr: https://github.com/ewanbarr?tab=repositories (multiple images here)
+# Maciej Serylak: https://github.com/mserylak/pulsar_docker
 #
-# 1. tempo
-# 2. tempo2
-# 3. dspsr
-# 4. sigproc
-# 5. inject_pulsar (Mike keith's build of sigproc)
-# 6. presto
-# 7. python 3.6
-# 8. fftw 3
-# 9. dev tools (gfortran etc.)
+# There is also:
 #
-# Please see DockerImageReadme.txt for software version information.
+# The docker images produced by the nanograv consortia: https://github.com/nanograv
+# The kernsuite repository docker images: https://github.com/kernsuite-docker/base
+#
+# Perhaps these resources will prove useful.
+#
+# Note the size of this image is ~2.25 GB.
+#
+#
+# SOFTWARE IN THIS IMAGE:
+#
+# 1. dev tools (gcc, gfortran etc.)
+# 2. python 3.6
+# 3. fftw 3
+# 4. tempo
+# 5. tempo2
+# 6. sigproc (Mike keith's build of sigproc with inject_pulsar and fast_fake)
+#
+# SOFTWARE WE HOPE TO HAVE EVENTUALLY
+# 7. psrchive
+# 8. dspsr
+# 9. presto
+#
+# Please see DockerImageReadme.md for software version information.
 ##############################################################################################
 
-# Use well supported distribution.
-#FROM centos:7
+# Use well supported distribution. v1.0 used: FROM centos:7
 FROM centos/python-36-centos7
 
 # Contact me for help!
@@ -171,18 +184,13 @@ RUN yum -y install epel-release  && \
     # DESCRIPTION:
     # The PGPLOT Graphics Subroutine Library is a Fortran- or C-callable,
     # device-independent graphics package for making simple scientific graphs.
-    pgplot
+    pgplot \
 
-    # Install these to enable building python 3.7
-    #openssl-devel\
-    #bzip2-devel\
-    #libffi-devel
+    git
 
-    ##########################################################################################
-    #
-    # ALL THE SOFTWARE LISTED SO FAR IS REQUIRED TO BUILD SIGPROC
-    #
-    ##########################################################################################
+##############################################################################################
+# Setup python environment
+##############################################################################################
 
 RUN yum -y install \
     python-pip \
@@ -216,7 +224,7 @@ ENV PIPELINE_BETA=$TEST_VECTOR_PIPELINE/beta
 ENV OSTYPE=linux
 
 # Python packages
-ENV PYTHONPATH=$HOME/ve/lib/python2.7/site-packages
+ENV PYTHONPATH=$HOME/ve/lib/python3.6/site-packages
 
 # psrcat
 ENV PSRCAT_FILE=$PSRHOME/psrcat_tar/psrcat.db
@@ -234,7 +242,7 @@ ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PSRHOME/tempo2/T2runtime/lib
 
 # SIGPROC
 # These flags assist with the Sigproc compilation process, so do not remove them. If you take
-# them out, then Sigproc will not build correctly.
+# them out, Sigproc will not build correctly.
 ENV SIGPROC=$PSRHOME/sigproc
 ENV PATH=$PATH:$SIGPROC/install/bin
 ENV FC=gfortran
@@ -242,23 +250,38 @@ ENV F77=gfortran
 ENV CC=gcc
 ENV CXX=g++
 
-# PSRCHIVE
-ENV PSRCHIVE=$PSRHOME/psrchive
-ENV PATH=$PATH:$PSRCHIVE/install/bin
-ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$PSRCHIVE/install/include
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PSRCHIVE/install/lib
-ENV PYTHONPATH=$PSRCHIVE/install/lib/python2.7/site-packages
+# Commented out until PSRCHIVE build error can be fixed.
+# EPSIC (required for PSRCHIVE)
+#ENV EPSIC=$PSRCHIVE/packages/epsic
+#ENV PATH=$PATH:$EPSIC/src
+#ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$EPSIC/src
 
+# Commented out until PSRCHIVE build error can be fixed.
+# PSRCHIVE
+#ENV PSRCHIVE=$PSRHOME/psrchive
+#ENV PATH=$PATH:$PSRCHIVE/install/bin
+#ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$PSRCHIVE/install/include
+#ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PSRCHIVE/install/lib
+#ENV PYTHONPATH=$PSRCHIVE/install/lib/python2.7/site-packages
+
+# Commented out until PSRCHIVE build error can be fixed.
 # DSPSR
-ENV DSPSR=$PSRHOME/dspsr
-ENV PATH=$PATH:$DSPSR/install/bin
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DSPSR/install/lib
-ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$DSPSR/install/include
+#ENV DSPSR=$PSRHOME/dspsr
+#ENV PATH=$PATH:$DSPSR/install/bin
+#ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$DSPSR/install/lib
+#ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$DSPSR/install/include
 
 # PGPLOT
 ENV PGPLOT_DIR /usr/lib/pgplot5
 ENV PGPLOT_FONT /usr/lib/pgplot5/grfont.dat
 ENV PGPLOT_INCLUDES /usr/include
+
+# Commented out until we integrate PRESTO.
+# PRESTO
+#ENV PRESTO=$PSRHOME/presto
+#ENV PATH=$PATH:$PRESTO/bin
+#ENV LD_LIBRARY_PATH=$PRESTO/lib
+#ENV PYTHONPATH=$PYTHONPATH:$PRESTO/lib/python
 
 ##############################################################################################
 # TEST VECTOR PIPELINE v1.0 + README Setup
@@ -269,24 +292,22 @@ RUN mkdir $PIPELINE_V1
 WORKDIR $PIPELINE_V1
 
 RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/v1.0/inject_pulsar_pipeline_readme.txt
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v1.0/CentOS/DockerImageReadme.txt
-
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/pulsar_injection_pipeline_v1.0.zip && \
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v1.0/CentOS/DockerImageReadme.txt && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/pulsar_injection_pipeline_v1.0.zip && \
     unzip pulsar_injection_pipeline_v1.0.zip -d $PIPELINE_V1 && \
     rm __MACOSX -R && \
     rm pulsar_injection_pipeline_v1.0.zip
 
 ##############################################################################################
-# Beta PIPELINE v2.0 + README Setup
+# Beta TEST VECTOR PIPELINE v2.0 + README Setup
 ##############################################################################################
 # Download test vector files
 RUN mkdir $PIPELINE_BETA
 WORKDIR $PIPELINE_BETA
 
 RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v2.0/CentOS/DockerImageReadme.md
-
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/beta_pipeline_v2.0.zip && \
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v2.0/CentOS/DockerImageReadme.md && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/beta_pipeline_v2.0.zip && \
     unzip beta_pipeline_v2.0.zip -d $PIPELINE_BETA && \
     rm __MACOSX -R && \
     rm beta_pipeline_v2.0.zip
@@ -322,29 +343,29 @@ RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/psrchive_SNAPSHOT_30_04_2019.zip
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/dspsr_SNAPSHOT_30_04_2019.zip
 
-# Unzip the software
-RUN unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/sigproc && \
-    unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
+# Unzip software
+RUN unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
     unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
+    unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/Sigproc_MJK_SNAPSHOT_30_04_2019 && \
     unzip psrchive_SNAPSHOT_30_04_2019.zip -d /home/psrchive_SNAPSHOT_30_04_2019 && \
-    unzip dspsr_SNAPSHOT_30_04_2019.zip -d /home/dspsr_SNAPSHOT_30_04_2019 && \
+    unzip dspsr_SNAPSHOT_30_04_2019.zip -d /home/dspsr_SNAPSHOT_30_04_2019
 
-# Remove zip files
-    rm Sigproc_MJK_SNAPSHOT_30_04_2019.zip && \
+# Move the software to the correct folder location
+RUN mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
+    mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
+    mv /home/Sigproc_MJK_SNAPSHOT_30_04_2019/Sigproc_MJK_SNAPSHOT_30_04_2019 /home/psr/soft/sigproc && \
+    mv /home/psrchive_SNAPSHOT_30_04_2019/psrchive_SNAPSHOT_30_04_2019 /home/psr/soft/psrchive && \
+    mv /home/dspsr_SNAPSHOT_30_04_2019/dspsr_SNAPSHOT_30_04_2019 /home/psr/soft/dspsr
+
+# Remove zip files / unecessary files and folders.
+RUN rm Sigproc_MJK_SNAPSHOT_30_04_2019.zip && \
     rm Tempo_SNAPSHOT_08_12_2016.zip && \
     rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
     rm psrchive_SNAPSHOT_30_04_2019.zip && \
     rm dspsr_SNAPSHOT_30_04_2019.zip && \
-
-# Move the software to the correct folder location
-    mv /home/sigproc /home/psr/soft/sigproc && \
-    mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
-    mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
-    mv /home/psrchive_SNAPSHOT_30_04_2019 /home/psr/soft/psrchive && \
-    mv /home/dspsr_SNAPSHOT_30_04_2019 /home/psr/soft/dspsr && \
-
-# Remove files which appear due to me packaging on a Mac.
-    rm /home/psr/soft/sigproc/__MACOSX -R && \
+    rm /home/Sigproc_MJK_SNAPSHOT_30_04_2019 -R && \
+    rm /home/psrchive_SNAPSHOT_30_04_2019 -R && \
+    rm /home/dspsr_SNAPSHOT_30_04_2019 -R && \
     rm /home/psr/soft/tempo/__MACOSX -R && \
     rm /home/psr/soft/tempo2/__MACOSX -R
 
@@ -352,11 +373,11 @@ RUN unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/sigproc && \
 # TEMPO Installation
 ##############################################################################################
 WORKDIR $PSRHOME/tempo
-RUN ./prepare
-RUN ./configure --prefix=$PSRHOME/tempo
-RUN make
-RUN make install
-RUN mv obsys.dat obsys.dat_ORIGINAL && \
+RUN ./prepare && \
+    ./configure --prefix=$PSRHOME/tempo && \
+    make && \
+    make install &&\
+    mv obsys.dat obsys.dat_ORIGINAL && \
     wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/obsys.dat
 
 ##############################################################################################
@@ -370,6 +391,7 @@ RUN ./bootstrap && \
     make && \
     make install && \
     make plugins-install
+
 WORKDIR $PSRHOME/tempo2/T2runtime/observatory
 RUN mv observatories.dat observatories.dat_ORIGINAL && \
     mv oldcodes.dat oldcodes.dat_ORIGINAL && \
@@ -383,26 +405,49 @@ RUN mv observatories.dat observatories.dat_ORIGINAL && \
 # Ok here we install sigproc - This is Mike Keith's version of Sigproc, which comes with the
 # fast_fake utility. First we set the environment variables for the install, then execute the
 # building steps.
-#WORKDIR $SIGPROC
-#RUN ./bootstrap && \
-#    ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2" && \
-#    make && \
-#    make install
+WORKDIR $SIGPROC
+RUN ./bootstrap && \
+    ./configure
+
+# Original configure command used - for some reason, this started to break. But repeating it helped.
+RUN ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2"
+
+RUN make
+RUN make install
 
 ##############################################################################################
 # Psrchive Installation
+#
+# The latest version of PSRCHIVE will not compile.
+#
+# First we have to setup the EPSIC package: http://psrchive.sourceforge.net/third/epsic/
+# PSRCHIVE will no longer build without it. There is a script provided in the PSRCHIVE
+# distribution that allows you to build EPSIC, but this is broken... so we have to fix
+# this script, and install EPSIC if we want PSRCHIVE at all....
 ##############################################################################################
-#RUN mkdir $PSRCHIVE
+
+#WORKDIR $PSRCHIVE/packages
+
+
+# Now we can build...
 #WORKDIR $PSRCHIVE
 #RUN ./bootstrap
+
+# We expect this next command to fail, so we continue when it does.
+#RUN ./configure --prefix=$PSRCHIVE/install; exit 0
+#WORKDIR $PSRCHIVE/packages
+
+#RUN ./epsic.csh
+#WORKDIR $PSRCHIVE
 #RUN ./configure --prefix=$PSRCHIVE/install
-#RUN make && \
-#    make install
+#RUN make
+#RUN make install
 
 ##############################################################################################
 # DSPSR Installation
+#
+# The DSPSR installation cannot be completed as I can not build PSRCHIVE due to an error.
 ##############################################################################################
-#RUN mkdir $DSPSR
 #WORKDIR $DSPSR
 #RUN ./bootstrap && \
 #    echo "bpsr dummy fits puma2 sigproc ska1" > backends.list
@@ -410,12 +455,20 @@ RUN mv observatories.dat observatories.dat_ORIGINAL && \
 #RUN make
 #RUN make install
 
+
+##############################################################################################
+# PRESETO INSTALL
+#
 # Note I have not built PRESTO due to this issue:
 # https://github.com/scottransom/presto/issues/68
 # I can workaround the issue by removing references to the code causing the problem, but I don't
 # believe that to be a sensible solution. Especially as I'm unsure what consequence that would
 # have. You can build this software from inside the docker container if absolutely necessary.
 # However I have removed the PRESTO pre-requisites to make the pipeline image smaller.
+#
+# Presto will only be added at a later date, when I have time to correct these issues.
+##############################################################################################
+#RUN git clone https://github.com/scottransom/presto.git
 
 ##############################################################################################
 # Finally...
