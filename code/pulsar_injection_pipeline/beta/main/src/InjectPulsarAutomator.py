@@ -34,11 +34,50 @@
     | Desired_output3.fil                                                                 |
     | ...                                                                                 |
     |                                                                                     |
-    | Here the destinations are not full paths, but file names only.                      |
+    | Here the destinations are not full paths, but file names only. Please note the file |
+    | names used in this example are not valid according to our file name standards       |
+    | developed as part of this work - more details on those standards below in the       |
+    | "Pre-requisites" section.                                                           |
     |                                                                                     |
-    | Please note the file names used in this example are not valid according to our      |
-    | file name standards developed as part of this work - more details on those          |
-    | standards below in the "Pre-requisites" section.                                    |
+    | .fil File Output:                                                                   |
+    |                                                                                     |
+    | Successful execution of the script should produce .fil files with the following     |
+    | file name format:                                                                   |
+    |                                                                                     |
+    | <label>_<batch>_<P0>_<dc>_<DM>_<Accel>_<Pulse>_<Targ SNR>.fil                       |
+    |                                                                                     |
+    | or                                                                                  |
+    |                                                                                     |
+    | <label>_<batch>_<P0>_<dc>_<DM>_<Accel>_<Pulse>_<Pulse Freq.>_<Targ SNR>.fil         |
+    |                                                                                     |
+    |                                                                                     |
+    | where                                                                               |
+    |                                                                                     |
+    | <Label> = a unique string identifier for the batch of test vectors that will        |
+    |           emerge when the commands in the command file are executed. This helps us  |
+    |           achieve a primitive type of version control. When possible you should     |
+    |           choose short but informative names for your vectors. This value is set    |
+    |           when running the InjectPulsarCommandCreator.py script.                    |
+    |                                                                                     |
+    | <batch> = an identifier that is used to version control test vector creation in a   |
+    |           primitive way. Users should supply a batch number when possible. This     |
+    |           value is set when running the InjectPulsarCommandCreator.py script.       |
+    |                                                                                     |
+    | <P0>    = period  in milliseconds.                                                  |
+    |                                                                                     |
+    | <DC>    = duty cycle.                                                               |
+    |                                                                                     |
+    | <DM>    = the Dispersion Measure (DM)                                               |
+    |                                                                                     |
+    | <Accel> =  the acceleration in m/s/s.                                               |
+    |                                                                                     |
+    | <Pulse> =  A unique identifier for the pulse inserted in to the test vector, e.g.   |
+    |            "Gaussian", or some pulsar JName.                                        |
+    |                                                                                     |
+    | <Pulse Freq.> = If the pulse shape corresponds to a real known pulsar, the freq. in |
+    |                 MHz that the pulse was observed at, e.g. 1400 MHz.                  |
+    |                                                                                     |
+    | <Targ SNR> = the target Signal-to-noise ratio (SNR) given to inject_pulsar.         |
     |                                                                                     |
     ***************************************************************************************
     | Pre-requisites:                                                                     |
@@ -364,7 +403,10 @@ class InjectPulsarAutomator:
                                         # The output file must exist. This can only be the case IF inject_pulsar
                                         # executed successfully. Now we move the output file to the output directory.
                                         full_destination_path = self.output_dir + "/" + dest_filename
-                                        copyfile("output.fil", full_destination_path)
+
+                                        # Added a string replace "?" as some weird behaviour was being seen
+                                        # I don't think this is really needed though.
+                                        copyfile("output.fil", full_destination_path.replace("?", ""))
 
                                         # Check the command file has been copied correctly.
                                         if os.path.exists(full_destination_path):

@@ -64,7 +64,7 @@ class PredFile(BaseFile):
 
         # Parameters of the .par file used to generate the predictor file.
         self.dm = 0.0
-        self.p0 = 0.0
+        self.p0 = 0.0  # in milliseconds.
         self.name = ""
 
         # Tempo2 parameters

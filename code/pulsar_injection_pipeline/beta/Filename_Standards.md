@@ -1,19 +1,32 @@
 
-# Test Vector Filename, Metadata & Directory Standards
+# AT4-11 - Test Vector Filename, Metadata & Directory Standards
 
 
 Dr. Rob Lyon (robert.lyon@manchester.ac.uk) 
 
 University of Manchester
 
+PSS Team
+
 01/04/2019
 
 Version 1.0
 
-# 1. Test Vector File Format
+
+## Summary
+Sprint task [AT4-11](https://jira.skatelescope.org/browse/AT4-11) generated the following sub-tasks:
+
+* Design and adopt a standardised test vector filename format (see Section 1).
+* Design and adopt a simple metadata standard allowing for primitive test vector version control (see Section 2).
+* Determine where/how test vectors will be stored (see Section 3). 
+
+These tasks have been completed. Evidence is provided in detail below. Additional outputs for [AT4-11](https://jira.skatelescope.org/browse/AT4-11), can be found in the TDT Dropbox folder at:
+
+`SKA_NIP/Bridging/PI2/SP117-FDAS for FPGAs/AT4-11 Write FDAS test vector interface`
+#1. Test Vector File Format
 
 ### Overview
-Test vectors are **filterbank** files used to analyse pulsar search software pipelines. These files are essentially n-dimensional matrices containing numerical values representing n-bit samples in time, frequency, phase, and even polarisation space. 
+Test vectors are **filterbank** files used to analyse PSS software pipelines. These files are essentially n-dimensional matrices containing numerical values representing n-bit samples in time, frequency, phase, and even polarisation space. 
 
 There are a number of parameters used to create test vectors. These include,
 
@@ -42,7 +55,7 @@ We also need to consider how many test vectors are likely to be generated in pra
 
 We have decided upon the following naming standard:
 
-`<LABEL>_<BATCH>_<PERIOD>_<WIDTH>_<DM>_<Z>_<S/N>_<PULSE>_<FREQ>.fil`
+`<LABEL>_<BATCH>_<PERIOD>_<WIDTH>_<DM>_<Z>_<PULSE>_<FREQ - optional>_<S/N>.fil`
 
 Where the 'tag' components comprising the filename are described in Table 1. below.
 
@@ -54,9 +67,10 @@ Where the 'tag' components comprising the filename are described in Table 1. bel
 |`<WIDTH>`  | Float     |16          | The width of the injected signal (percentage of phase).|
 |`<DM>`     | Float     |16          | The DM of the injected signal in pc cm<sup>-3</sup>.|   
 |`<Z>`      | Float     |16          | The acceleration of the injected signal in m/s/s.|
-|`<S/N>`    | Float     |16          | The SNR of the injected signal.|
 |`<PULSE>`  | String    |20          | An alphanumeric tag describing the pulsar shape injected, e.g. the JName of a pulsar. Note that `+` and `-` characters are valid here too.|
-|`<FREQ>`   | String    |10          | An alphanumeric tag describing the frequency of the injected pulse, e.g. '1400' corresponding to 1400 MHz.|
+|`<FREQ>`   | String    |10          | An alphanumeric tag describing the frequency of the injected pulse, e.g. '1400' corresponding to 1400 MHz. This component is optional|
+|`<S/N>`    | Float     |16          | The target S/N of the injected signal.|
+
 **Table 1. File name components.** 
 
 Most operating systems restrict filenames to 255 characters or less. The max file size achievable if following the standard above, is 170 characters excluding the file extension (174 with the `.fil` extension). It is not necessary to pad components so that they meet the max length.
@@ -67,8 +81,8 @@ Some valid file names presented below for clarity:
 
 | Example  | Comment |
 |:---------|:--------|
-|`TEST_1_33.3_0.1_56.7_0.0_16.5_B0531+21_1408.fil`| An example test vector representing an observation of the crab pulsar.|
-|`TEST_1_10.0_0.1_100_0.0_7.5_FAKE1_1408.fil`| An example test vector representing an observation of some artificial signal called `FAKE1`.|
+|`TEST_1_33.3_0.1_56.7_0.0_B0531+21_1408_16.5.fil`| An example test vector representing an observation of the crab pulsar.|
+|`TEST_1_10.0_0.1_100_0.0_FAKE1_14087.5.fil`| An example test vector representing an observation of some artificial signal called `FAKE1`.|
 **Table 2. Examples of valid file names.** 
 
 ### Tools
@@ -120,7 +134,7 @@ These files are not required for every test vector, but for every test suite (wh
 
 To link individual test vectors to metadata files, ensure the `<LABEL>` and `<BATCH>` tags correspond to the filenames of existing metadata files. For example, if we have a test vector called:
 
-`FOPTest_Batch1_33.3_0.1_56.7_0.0_16.5_B0531+21_1408.fil`
+`FOPTest_Batch1_33.3_0.1_56.7_0.0_B0531+21_1408_16.5.fil`
 
 Then there should be two metadata files called `FOPTest.tvm` and `Batch1.tvm` respectively. These files can be located anywhere so long as they are accessible.
 

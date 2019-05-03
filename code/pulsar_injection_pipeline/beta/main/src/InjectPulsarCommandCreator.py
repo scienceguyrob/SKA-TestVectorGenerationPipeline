@@ -491,14 +491,16 @@ class InjectPulsarCommandCreator:
                             # Write out desired destination following the command.
                             dest = self.generate_dest_path(asc, pred, self.snr, self.batch, self.seed, self.label)
 
-                            self.append_to_file(command_file_path, dest + "\n")
+                            # Added a string replace "?" as some weird behaviour was being seen
+                            # I don't think this is really needed though.
+                            self.append_to_file(command_file_path, dest.replace("?", "") + "\n")
 
                         command_counter += 1
 
 
-                print("\tInject_pulsar commands created: "    + str(commands_created))
-                print("\tInject_pulsar commands not created: "+ str(commands_not_created))
-                print("\tInject_pulsar commands written out: "+ str(commands_written))
+                print("\tInject_pulsar commands created: "     + str(commands_created))
+                print("\tInject_pulsar commands not created: " + str(commands_not_created))
+                print("\tInject_pulsar commands written out: " + str(commands_written))
             else:
                 print("\n\t**************************")
                 print("\t|   Parameters Invalid  |")
@@ -696,10 +698,10 @@ class InjectPulsarCommandCreator:
 
         if asc.freq is "":
             return label + "_" + str(batch) + "_" + str(pred.p0) + "_" + str(asc.dc) + "_" + str(pred.dm) +\
-                   "_" + str(pred.accel) + "_" + asc.name + ".fil"
+                   "_" + str(pred.accel) + "_" + asc.name + "_" + str(snr) + ".fil"
         else:
             return label + "_" + str(batch) + "_" + str(pred.p0) + "_" + str(asc.dc) + "_" + str(pred.dm) + \
-                   "_" + str(pred.accel) + "_" + asc.name + "_" + str(asc.freq) + ".fil"
+                   "_" + str(pred.accel) + "_" + asc.name + "_" + str(asc.freq) + "_" + str(snr) + ".fil"
 
     # ******************************************************************************************
 
