@@ -234,12 +234,6 @@ ENV PATH=$PATH:$PSRHOME/psrcat_tar
 ENV TEMPO=$PSRHOME/tempo
 ENV PATH=$PATH:$PSRHOME/tempo/bin
 
-# Tempo2
-ENV TEMPO2=$PSRHOME/tempo2/T2runtime
-ENV PATH=$PATH:$PSRHOME/tempo2/T2runtime/bin
-ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$PSRHOME/tempo2/T2runtime/include
-ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PSRHOME/tempo2/T2runtime/lib
-
 # SIGPROC
 # These flags assist with the Sigproc compilation process, so do not remove them. If you take
 # them out, Sigproc will not build correctly.
@@ -342,35 +336,39 @@ WORKDIR /home
 
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/Sigproc_MJK_SNAPSHOT_30_04_2019.zip
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo_SNAPSHOT_08_12_2016.zip
-RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
+#RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/08_12_2016/Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/psrchive_SNAPSHOT_30_04_2019.zip
 RUN wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/dspsr_SNAPSHOT_30_04_2019.zip
 
 # Unzip software
 RUN unzip Tempo_SNAPSHOT_08_12_2016.zip -d /home/Tempo_SNAPSHOT_08_12_2016 && \
-    unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
     unzip Sigproc_MJK_SNAPSHOT_30_04_2019.zip -d /home/Sigproc_MJK_SNAPSHOT_30_04_2019 && \
     unzip psrchive_SNAPSHOT_30_04_2019.zip -d /home/psrchive_SNAPSHOT_30_04_2019 && \
     unzip dspsr_SNAPSHOT_30_04_2019.zip -d /home/dspsr_SNAPSHOT_30_04_2019
 
+#unzip Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip -d /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 && \
+
 # Move the software to the correct folder location
 RUN mv /home/Tempo_SNAPSHOT_08_12_2016 /home/psr/soft/tempo && \
-    mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
     mv /home/Sigproc_MJK_SNAPSHOT_30_04_2019/Sigproc_MJK_SNAPSHOT_30_04_2019 /home/psr/soft/sigproc && \
     mv /home/psrchive_SNAPSHOT_30_04_2019/psrchive_SNAPSHOT_30_04_2019 /home/psr/soft/psrchive && \
     mv /home/dspsr_SNAPSHOT_30_04_2019/dspsr_SNAPSHOT_30_04_2019 /home/psr/soft/dspsr
 
+#mv /home/Tempo2_2016.11.3_SNAPSHOT_08_12_2016 /home/psr/soft/tempo2 && \
+
 # Remove zip files / unecessary files and folders.
 RUN rm Sigproc_MJK_SNAPSHOT_30_04_2019.zip && \
     rm Tempo_SNAPSHOT_08_12_2016.zip && \
-    rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
     rm psrchive_SNAPSHOT_30_04_2019.zip && \
     rm dspsr_SNAPSHOT_30_04_2019.zip && \
     rm /home/Sigproc_MJK_SNAPSHOT_30_04_2019 -R && \
     rm /home/psrchive_SNAPSHOT_30_04_2019 -R && \
     rm /home/dspsr_SNAPSHOT_30_04_2019 -R && \
-    rm /home/psr/soft/tempo/__MACOSX -R && \
-    rm /home/psr/soft/tempo2/__MACOSX -R
+    rm /home/psr/soft/tempo/__MACOSX -R
+
+
+#rm Tempo2_2016.11.3_SNAPSHOT_08_12_2016.zip && \
+# rm /home/psr/soft/tempo2/__MACOSX -R
 
 ##############################################################################################
 # TEMPO Installation
@@ -388,9 +386,33 @@ RUN ./prepare && \
 ##############################################################################################
 # Ok here we install the latest version of TEMPO2.
 
-WORKDIR $PSRHOME/tempo2
+#WORKDIR $PSRHOME/tempo2
+#RUN ./bootstrap && \
+#    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
+#    make && \
+#    make install && \
+#    make plugins-install
+#
+#WORKDIR $PSRHOME/tempo2/T2runtime/observatory
+#RUN mv observatories.dat observatories.dat_ORIGINAL && \
+#    mv oldcodes.dat oldcodes.dat_ORIGINAL && \
+#    mv aliases aliases_ORIGINAL && \
+#    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/observatories.dat && \
+#    wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/aliases
+
+# Tempo2
+ENV TEMPO2=$PSRHOME/tempo2
+ENV PATH=$PATH:$PSRHOME/tempo2/bin
+ENV C_INCLUDE_PATH=$C_INCLUDE_PATH:$PSRHOME/tempo2/include
+ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PSRHOME/tempo2/lib
+
+WORKDIR $PSRHOME/
+RUN git clone https://bitbucket.org/psrsoft/tempo2.git
+
+WORKDIR /home/psr/soft/tempo2
+
 RUN ./bootstrap && \
-    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
+    ./configure --prefix=/home/psr/soft/tempo2 --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
     make && \
     make install && \
     make plugins-install
@@ -402,6 +424,9 @@ RUN mv observatories.dat observatories.dat_ORIGINAL && \
     wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/observatories.dat && \
     wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/lib/30_04_2019/aliases
 
+
+RUN pip install  --no-cache-dir cython -U
+
 ##############################################################################################
 # Sigproc Installation
 ##############################################################################################
@@ -409,69 +434,31 @@ RUN mv observatories.dat observatories.dat_ORIGINAL && \
 # fast_fake utility. First we set the environment variables for the install, then execute the
 # building steps.
 WORKDIR $SIGPROC
+
 RUN ./bootstrap && \
     ./configure
 
 # Original configure command used - for some reason, this started to break. But repeating it helped.
-RUN ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/T2runtime/lib" LIBS="-ltempo2"
+RUN ./configure --prefix=$SIGPROC/install LDFLAGS="-L/home/psr/soft/tempo2/lib" LIBS="-ltempo2"
 
 RUN make
 RUN make install
 
-##############################################################################################
-# Psrchive Installation
-#
-# The latest version of PSRCHIVE will not compile.
-#
-# First we have to setup the EPSIC package: http://psrchive.sourceforge.net/third/epsic/
-# PSRCHIVE will no longer build without it. There is a script provided in the PSRCHIVE
-# distribution that allows you to build EPSIC, but this is broken... so we have to fix
-# this script, and install EPSIC if we want PSRCHIVE at all....
-##############################################################################################
-
-#WORKDIR $PSRCHIVE/packages
-
-
-# Now we can build...
-#WORKDIR $PSRCHIVE
-#RUN ./bootstrap
-
-# We expect this next command to fail, so we continue when it does.
-#RUN ./configure --prefix=$PSRCHIVE/install; exit 0
-#WORKDIR $PSRCHIVE/packages
-
-#RUN ./epsic.csh
-#WORKDIR $PSRCHIVE
-#RUN ./configure --prefix=$PSRCHIVE/install
-#RUN make
-#RUN make install
 
 ##############################################################################################
-# DSPSR Installation
-#
-# The DSPSR installation cannot be completed as I can not build PSRCHIVE due to an error.
+# Filtools Installation
 ##############################################################################################
-#WORKDIR $DSPSR
-#RUN ./bootstrap && \
-#    echo "bpsr dummy fits puma2 sigproc ska1" > backends.list
-#RUN ./configure --prefix=$DSPSR/install
-#RUN make
-#RUN make install
+# Install Mike Keith's FILTOOLS
 
+WORKDIR /home/psr/soft
 
-##############################################################################################
-# PRESETO INSTALL
-#
-# Note I have not built PRESTO due to this issue:
-# https://github.com/scottransom/presto/issues/68
-# I can workaround the issue by removing references to the code causing the problem, but I don't
-# believe that to be a sensible solution. Especially as I'm unsure what consequence that would
-# have. You can build this software from inside the docker container if absolutely necessary.
-# However I have removed the PRESTO pre-requisites to make the pipeline image smaller.
-#
-# Presto will only be added at a later date, when I have time to correct these issues.
-##############################################################################################
-#RUN git clone https://github.com/scottransom/presto.git
+RUN pip install pyyaml
+RUN pip install git+https://bitbucket.org/mkeith/filtools
+
+# Setup Tempo2 so it can use the python API, required by the filtools code.
+WORKDIR /home/psr/soft/tempo2/python/t2pred
+
+RUN python setup.py install
 
 ##############################################################################################
 # Finally...
