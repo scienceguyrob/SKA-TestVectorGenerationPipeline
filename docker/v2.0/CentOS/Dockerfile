@@ -324,11 +324,14 @@ RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGeneratio
 RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/docker/v2.0/CentOS/DockerImageReadme.md && \
     wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/experimental/lib/25_06_2019/exp_pipeline_v2.0.zip && \
     unzip exp_pipeline_v2.0.zip -d exp_pipeline_v2.0 && \
-    rm exp_pipeline_v2.0/__MACOSX -R && \
     rm exp_pipeline_v2.0.zip
 
-RUN mv /home/psr/soft/tvp/exp/exp_pipeline_v2.0/beta/Filename_Standards.md /home/psr/soft/tvp/exp/Filename_Standards.md && \
-    cp /home/psr/soft/tvp/exp/exp_pipeline_v2.0 /home/psr/soft/tvp/exp/src -R
+RUN mv /home/psr/soft/tvp/exp/exp_pipeline_v2.0 /home/psr/soft
+RUN cp -r /home/psr/soft/exp_pipeline_v2.0/exp /home/psr/soft/tvp/exp/src
+RUN rm /home/psr/soft/exp_pipeline_v2.0 -R
+
+ENV PATH=$PATH:/home/psr/soft/tvp/exp/src
+
 
 ##############################################################################################
 # Elmarie van Heerden's Code
