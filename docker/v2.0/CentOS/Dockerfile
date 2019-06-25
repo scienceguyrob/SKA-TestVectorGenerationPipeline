@@ -222,6 +222,7 @@ ENV PSRHOME=/home/psr/soft
 ENV TEST_VECTOR_PIPELINE=$PSRHOME/tvp
 ENV PIPELINE_V1=$TEST_VECTOR_PIPELINE/v1.0
 ENV PIPELINE_BETA=$TEST_VECTOR_PIPELINE/beta
+ENV PIPELINE_EXP=$TEST_VECTOR_PIPELINE/exp
 ENV OSTYPE=linux
 
 # Python packages
@@ -284,11 +285,12 @@ ENV PGPLOT_INCLUDES /usr/include
 # Download test vector files
 RUN mkdir $TEST_VECTOR_PIPELINE
 RUN mkdir $PIPELINE_V1
+
 WORKDIR $PIPELINE_V1
 
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/v1.0/inject_pulsar_pipeline_readme.txt
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v1.0/CentOS/DockerImageReadme.txt && \
-    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/pulsar_injection_pipeline_v1.0.zip && \
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/code/pulsar_injection_pipeline/v1.0/inject_pulsar_pipeline_readme.txt
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/docker/v1.0/CentOS/DockerImageReadme.txt && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/experimental/lib/30_04_2019/pulsar_injection_pipeline_v1.0.zip && \
     unzip pulsar_injection_pipeline_v1.0.zip -d $PIPELINE_V1 && \
     rm __MACOSX -R && \
     rm pulsar_injection_pipeline_v1.0.zip
@@ -300,15 +302,33 @@ RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGeneratio
 RUN mkdir $PIPELINE_BETA
 WORKDIR $PIPELINE_BETA
 
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
-RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/v2.0/docker/v2.0/CentOS/DockerImageReadme.md && \
-    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/v2.0/lib/30_04_2019/beta_pipeline_v2.0.zip && \
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/docker/v2.0/CentOS/DockerImageReadme.md && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/experimental/lib/30_04_2019/beta_pipeline_v2.0.zip && \
     unzip beta_pipeline_v2.0.zip -d beta_pipeline_v2.0 && \
     rm beta_pipeline_v2.0/__MACOSX -R && \
     rm beta_pipeline_v2.0.zip
 
 RUN mv /home/psr/soft/tvp/beta/beta_pipeline_v2.0/beta/Filename_Standards.md /home/psr/soft/tvp/beta/Filename_Standards.md && \
     cp /home/psr/soft/tvp/beta/beta_pipeline_v2.0/beta/main/src /home/psr/soft/tvp/beta/src -R
+
+
+##############################################################################################
+# Experimental TEST VECTOR PIPELINE
+##############################################################################################
+# Download test vector files
+RUN mkdir $PIPELINE_EXP
+WORKDIR $PIPELINE_EXP
+
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/code/pulsar_injection_pipeline/beta/TestVectorPipelineReadme_v2.0.md
+RUN wget https://raw.githubusercontent.com/scienceguyrob/SKA-TestVectorGenerationPipeline/experimental/docker/v2.0/CentOS/DockerImageReadme.md && \
+    wget https://github.com/scienceguyrob/SKA-TestVectorGenerationPipeline/raw/experimental/lib/25_06_2019/exp_pipeline_v2.0.zip && \
+    unzip exp_pipeline_v2.0.zip -d exp_pipeline_v2.0 && \
+    rm exp_pipeline_v2.0/__MACOSX -R && \
+    rm exp_pipeline_v2.0.zip
+
+RUN mv /home/psr/soft/tvp/exp/exp_pipeline_v2.0/beta/Filename_Standards.md /home/psr/soft/tvp/exp/Filename_Standards.md && \
+    cp /home/psr/soft/tvp/exp/exp_pipeline_v2.0 /home/psr/soft/tvp/exp/src -R
 
 ##############################################################################################
 # Elmarie van Heerden's Code
