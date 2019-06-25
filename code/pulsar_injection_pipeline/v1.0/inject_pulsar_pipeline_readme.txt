@@ -95,6 +95,14 @@ Note that all the source files described below can be found in the src folder.
       compatible with python version 3.6. It requires scipy version 0.15 or later to function.
       Numpy 1.0 or later, and matplotlib version 1.5 or later are also required.
 
+    - ftInjectPulsarCommandCreator.py  (version 1.0) - same as InjectPulsarCommandCreator.py
+      except it generates commands compatible with the ft_inject_pulsar.py tool (from
+      filtools (https://bitbucket.org/mkeith/filtools/src/master/).
+
+    - ftInjectPulsarAutomator.py (version 1.0) - same as InjectPulsarAutomator.py
+      except it executes commands compatible with the ft_inject_pulsar.py tool (from
+      filtools (https://bitbucket.org/mkeith/filtools/src/master/).
+
 5. Versions of pulsar software used:
     - Tempo2 version 2014.11.1
     - fast_fake version updated on 29th October 2014, commit 41d05788720577994848c8209b02c7bef02d7ece (see https://github.com/SixByNine/sigproc/blob/master/src/fast_fake.c).

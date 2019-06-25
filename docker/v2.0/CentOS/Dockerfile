@@ -1,11 +1,11 @@
 ##############################################################################################
 # Purpose   : Dockerize Components of Pulsar test vector generation software stack.
 # Python    : 3.6
-# Version   : 2.0
+# Version   : Experimental
 # Author    : Rob Lyon (robert.lyon@manchester.ac.uk), Rob Lyon, Yan Grange, Wietze Albers .
 ##############################################################################################
 #
-# This docker file sets up a basic test vector generation pipeline environment. It inlcudes
+# This docker file sets up an experimental test vector generation pipeline environment. It inlcudes
 # only a minimal subset of pulsar community software. For a more complete pulsar image, please
 # look at the excellent Dockerfile's written by,
 #
@@ -31,11 +31,12 @@
 # 4. tempo
 # 5. tempo2
 # 6. sigproc (Mike keith's build of sigproc with inject_pulsar and fast_fake)
+# 7. Filtools
 #
 # SOFTWARE WE HOPE TO HAVE EVENTUALLY
-# 7. psrchive
-# 8. dspsr
-# 9. presto
+# 8. psrchive
+# 9. dspsr
+# 10. presto
 #
 # Please see DockerImageReadme.md for software version information.
 ##############################################################################################
@@ -458,6 +459,7 @@ RUN pip install git+https://bitbucket.org/mkeith/filtools
 # Setup Tempo2 so it can use the python API, required by the filtools code.
 WORKDIR /home/psr/soft/tempo2/python/t2pred
 
+ENV LDFLAGS="-L/home/psr/soft/tempo2/lib"
 RUN python setup.py install
 
 ##############################################################################################
