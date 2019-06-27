@@ -434,6 +434,7 @@ WORKDIR $PSRHOME/
 RUN git clone https://bitbucket.org/psrsoft/tempo2.git
 
 WORKDIR /home/psr/soft/tempo2
+RUN mkdir /home/psr/soft/tempo2/observatory
 
 RUN ./bootstrap && \
     ./configure --prefix=/home/psr/soft/tempo2 --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
@@ -485,6 +486,13 @@ WORKDIR /home/psr/soft/tempo2/python/t2pred
 ENV LDFLAGS="-L/home/psr/soft/tempo2/lib"
 RUN python setup.py install
 
+
+#RUN mkdir /home/psr/soft/tempo2/observatory/
+#RUN cp /home/psr/soft/tempo2/T2runtime/observatory/observatories.dat home/psr/soft/tempo2/observatory/observatories.dat
+RUN cp /home/psr/soft/tempo2/T2runtime/. /home/psr/soft/tempo2 -R
+
+# all files in T2runtime in the parent directory.
+#
 ##############################################################################################
 # Finally...
 ##############################################################################################

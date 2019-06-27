@@ -234,7 +234,7 @@ class ftInjectPulsarCommandCreator:
         self.scattering    = False      # The scattering flag.
         self.yaml          = ""         # The full path to the yaml file that contains telescope details.
         self.npol          = 1          # Number of polarisations.
-        self.bandwidth     = 300        # Bandwidth in MHz.
+        self.bandwidth     = 300.0       # Bandwidth in MHz.
         self.tobs          = 600        # Observation length.
         self.gain          = 0.0
         self.tsys          = 0.0
@@ -322,7 +322,7 @@ class ftInjectPulsarCommandCreator:
         parser.add_option("--npol", action="store", dest="npol",
                           help='The number of polarisations (optional).', default=1)
 
-        parser.add_option("--bw", action="store", dest="bw",
+        parser.add_option("--bw", action="store", dest="bw", type=float,
                           help='The bandwidth in MHz (optional).', default=300.0)
 
         parser.add_option("--tobs", action="store", dest="tobs",
@@ -373,7 +373,7 @@ class ftInjectPulsarCommandCreator:
         print("\t.yaml file: "                    + str(self.yaml))
         print("\tPolarisations: "                 + str(self.npol))
         print("\tBandwidth (MHz): "               + str(self.bandwidth))
-        print("\tObservation length (s): "       + str(self.tobs))
+        print("\tObservation length (s): "        + str(self.tobs))
         print("\n\tChecking user supplied parameters...")
 
         # Check the command line parameters are valid.
@@ -720,12 +720,12 @@ class ftInjectPulsarCommandCreator:
 
         if scattering:
             command = "ft_inject_pulsar " + fil_file_path + " -o output.fil" + \
-                      " --pred " + pred.fpth + " -p " + asc.fpth + " -S" + str(flux_density) + \
-                      " -D" + str(DM) + " -T " + str(yaml)
+                      " --pred " + pred.fpth + " -p " + asc.fpth + " -S " + str(flux_density) + \
+                      " -D " + str(DM) + " -T " + str(yaml).replace(".yaml", "")
         else:  # No scattering.
             command = "ft_inject_pulsar " + fil_file_path + " -o output.fil" + \
-                      " --pred " + pred.fpth + " -p " + asc.fpth + " -S" + str(flux_density) + \
-                      " -D" + str(DM) + " -T " + str(yaml) + " -x"
+                      " --pred " + pred.fpth + " -p " + asc.fpth + " -S " + str(flux_density) + \
+                      " -D " + str(DM) + " -T " + str(yaml).replace(".yaml", "") + " -x"
 
         return command
 
@@ -1127,19 +1127,19 @@ class ftInjectPulsarCommandCreator:
             return False
 
         # Polarisations
-        if type(args[11]) <= 0:
+        if args[11] <= 0:
             if not testing:
                 print("\tNumber of polarisations must be > 0.")
             return False
 
         # Bandwidth
-        if type(args[12]) <= 0.0:
+        if args[12] <= 0.0:
             if not testing:
                 print("\tBandwidth must be  > 0.0.")
             return False
 
         # Observation length
-        if type(args[13]) <= 0.0:
+        if args[13] <= 0.0:
             if not testing:
                 print("\tObservation length must be > 0.0.")
             return False
