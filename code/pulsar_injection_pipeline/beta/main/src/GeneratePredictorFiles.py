@@ -393,7 +393,7 @@ class GeneratePredictorFiles:
                         GeneratePredictorFiles.append_to_file(log_file_path, "\nCreated Command:\n")
                         GeneratePredictorFiles.append_to_file(log_file_path, command + "\n")
 
-                        # Now try to create a PrefFile Object.
+                        # Now try to create a PredFile Object.
                         pred = PredFile()
 
                         # Build the file name we want this .dat (predictor) file to have.
@@ -403,46 +403,55 @@ class GeneratePredictorFiles:
                         if self.verbose:
                             print("\tOutput file path: " + str(output_file_name))
 
-                        GeneratePredictorFiles.append_to_file(log_file_path, "Created predictor file name:")
-                        GeneratePredictorFiles.append_to_file(log_file_path, output_file_name + "\n")
-
-                        # Now try to execute the tempo2 command...
-                        #
-                        process = subprocess.Popen(command, shell=True)
-                        process.wait()
-
-                        # For debugging on local machine
-                        #Common.create_file("t2pred.dat")
-
-                        # If the expected output file exists... Note that tempo2 always writes an output
-                        # file called t2pred.dat, which is why this is hard coded here.
-                        if os.path.exists("t2pred.dat"):
-
-                            generation_successes += 1
-
-                            # Now we want to copy the file to the desired output location,
-                            # i.e. with the .dat filename we created above.
-                            out_path = self.output_dir + "/" + output_file_name
-
-                            # This will clear the output file if it exists, otherwise it will create it.
-                            GeneratePredictorFiles.clear_file(out_path)
-
-                            # Now do the copy...
-                            copyfile("t2pred.dat", out_path)
-
-                            # Check the file exists.
-                            if os.path.exists(output_file_name):
-                                # The file was copied successfully.
-                                predictors_copied += 1
-                            else:
-                                predictors_failing_to_copy += 1
-
-                        else:
-                            # The expected t2pred.dat file does not exist - tempo2 must have
-                            # encountered some problem. Tell the user...
-                            print("\tError generating predictor file for par: " + str(par_file_path))
+                        if output_file_name is None:
+                            # Could not create a valid output file name
+                            print("\tError generating output file name: " + str(par_file_path))
+                            print("\tThis means the following Tempo2 command could not be run:\n " + str(command))
 
                             generation_errors += 1
+
+                        else:
+
+                            GeneratePredictorFiles.append_to_file(log_file_path, "Created predictor file name:")
+                            GeneratePredictorFiles.append_to_file(log_file_path, str(output_file_name) + "\n")
+
+                            # Now try to execute the tempo2 command...
+                            #
+                            process = subprocess.Popen(command, shell=True)
+                            process.wait()
+
+                            # For debugging on local machine
+                            #Common.create_file("t2pred.dat")
+
+                            # If the expected output file exists... Note that tempo2 always writes an output
+                            # file called t2pred.dat, which is why this is hard coded here.
+                            if os.path.exists("t2pred.dat"):
+
+                                generation_successes += 1
+
+                                # Now we want to copy the file to the desired output location,
+                                # i.e. with the .dat filename we created above.
+                                out_path = self.output_dir + "/" + output_file_name
+
+                                # This will clear the output file if it exists, otherwise it will create it.
+                                GeneratePredictorFiles.clear_file(out_path)
+
+                                # Now do the copy...
+                                copyfile("t2pred.dat", out_path)
+
+                                # Check the file exists.
+                                if os.path.exists(output_file_name):
+                                    # The file was copied successfully.
+                                    predictors_copied += 1
+                                else:
+                                    predictors_failing_to_copy += 1
+
+                            else:
+                                # The expected t2pred.dat file does not exist - tempo2 must have
+                                # encountered some problem. Tell the user...
+                                print("\tError generating predictor file for par: " + str(par_file_path))
+
+                                generation_errors += 1
 
                 # Finally get the time that the procedure finished.
                 end = datetime.datetime.now()
@@ -715,7 +724,7 @@ class GeneratePredictorFiles:
                 print("\tFirst channel (F1) parameter must be > 0.")
             outcome = False
 
-        # First channel
+        # Last channel
         if args[5] <= 0.0:
             if not testing:
                 print("\tLast channel (F2) parameter must be > 0.")
@@ -724,7 +733,7 @@ class GeneratePredictorFiles:
         # Channel Start vs End check
         if args[5] <= args[4]:
             if not testing:
-                print("\tF2 parameter must be less than F1 parameter.")
+                print("\tF1 parameter must be less than F2 parameter.")
             outcome = False
 
         # Time coefficients

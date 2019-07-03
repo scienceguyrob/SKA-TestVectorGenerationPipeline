@@ -297,7 +297,20 @@ class PredFile(BaseFile):
             fc_int = int(fc)
             accel_float = float(accel)
         except ValueError:
-            print("Here")
+            print("Error parsing numerical values passed to create_valid_file_name() in PredFile.py - unable to cast"+\
+                  "1 or more parameters to float types. Current values and data types for the variables to be cast to"+\
+                  " floats:")
+            print
+            print("\tVariable: dm            value=" + str(dm)        + " type=" + str(type(dm)))
+            print("\tVariable: period_ms     value=" + str(period_ms) + " type=" + str(type(period_ms)))
+            print("\tVariable: obslen        value=" + str(obslen)    + " type=" + str(type(obslen)))
+            print("\tVariable: f1            value=" + str(f1)        + " type=" + str(type(f1)))
+            print("\tVariable: f2            value=" + str(f2)        + " type=" + str(type(f2)))
+            print("\tVariable: tc            value=" + str(tc)        + " type=" + str(type(tc)))
+            print("\tVariable: fc            value=" + str(fc)        + " type=" + str(type(fc)))
+            print("\tVariable: accel         value=" + str(accel)     + " type=" + str(type(accel)))
+
+
             return None
 
         if dm_float <= 0:
@@ -319,6 +332,6 @@ class PredFile(BaseFile):
 
         return nme + "_DM=" + str(dm_float) + "_P0=" + str(period_float_ms) + "ms_OBS=" + str(obslen_int) + "s_F1=" + \
                str(f1_float) + "_F2=" + str(f2_float) + "_T=" + str(tc_int) + "_F=" + str(fc_int) + \
-               "_Z="+ str(accel_float) +".dat"
+               "_Z=" + str(accel_float) + ".dat"
 
     # ******************************************************************************************
