@@ -436,7 +436,7 @@ class InjectPulsarCommandCreator:
             #
             # Example of how inject_pulsar executes...
             # inject_pulsar --pred t2pred.dat --prof prof.asc file.fil > output.fil
-            command = "inject_pulsar --seed " + str(self.seed) + " --pred " + predictor + " --prof " + value + " " + self.filFilePath + " > output.fil"
+            command = "inject_pulsar --snr 15 --seed " + str(self.seed) + " --pred " + predictor + " --prof " + value + " " + self.filFilePath + " > output.fil"
 
             if(self.verbose):
                 print "\tCommand ",command , " : " , command

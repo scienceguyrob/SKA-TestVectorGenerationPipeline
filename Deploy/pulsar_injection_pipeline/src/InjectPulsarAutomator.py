@@ -251,13 +251,13 @@ class InjectPulsarAutomator:
                     # a useful name from the execution command.  Execution commands resemble
                     # the following:
                     #
-                    # inject_pulsar --seed 1 --pred J1032-5911.dat --prof J1032-5911_1382_1.asc Noise.fil > output.fil
-                    # inject_pulsar --seed 1 --pred J1428-5530.dat --prof J1428-5530_1382_1.asc Noise.fil > output.fil
-                    # inject_pulsar --seed 1 --pred J0849-6322.dat --prof J0849-6322_1374.asc Noise.fil   > output.fil
-                    #       ^           ^       ^           ^           ^               ^        ^     ^
-                    #       |           |       |           |           |               |        |     |
-                    #       |           |       |           |           |               |        |     |
-                    #       0           1       2           3           4               5        6     7   INDEXES
+                    # inject_pulsar --snr 15 --seed 1 --pred J1032-5911.dat --prof J1032-5911_1382_1.asc Noise.fil > output.fil
+                    # inject_pulsar --snr 15 --seed 1 --pred J1428-5530.dat --prof J1428-5530_1382_1.asc Noise.fil > output.fil
+                    # inject_pulsar --snr 15 --seed 1 --pred J0849-6322.dat --prof J0849-6322_1374.asc Noise.fil   > output.fil
+                    #       ^         ^   ^      ^  ^     ^        ^          ^        ^                  ^
+                    #       |         |   |      |  |     |        |          |        |                  |
+                    #       |         |   |      |  |     |        |          |        |                  |
+                    #       0         1   2      3  4     5        6          7        8                  9   INDEXES
                     #
                     #
                     # So as we can see the .dat and .asc files both contain useful descriptions of the output
@@ -266,12 +266,12 @@ class InjectPulsarAutomator:
                     # the asc file). So we extract the source name and the frequency, to use for copying the
                     # output file.
 
-                    # If there are eight components to the command, we must have a valid command.
-                    if(len(commandComponents) == 10):
+                    # If there are twelve components to the command, we must have a valid command.
+                    if(len(commandComponents) == 12):
 
                         # From indexes shown in comments above, we know that...
-                        fname = ntpath.basename(commandComponents[4].replace(".dat",""))
-                        ascFileName = ntpath.basename(commandComponents[6].replace(".asc",""))
+                        fname = ntpath.basename(commandComponents[6].replace(".dat",""))
+                        ascFileName = ntpath.basename(commandComponents[8].replace(".asc",""))
 
                         if("FakePulsar_" in fname):
                             # We want to retain knowledge of the ASC profile injected into the noise data.

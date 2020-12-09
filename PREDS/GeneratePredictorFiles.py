@@ -66,6 +66,26 @@
     | --mjd2 (string) the start time mjd used by tempo2 during predictor     |
     |                file creation (default=56001).                          |
     |                                                                        |
+    | --tel (string) the telescope the simulated pulsar observation          |
+    |                corresponds to. By default this is set to "PARKES".     |
+    |                Valid values include, but are not limited to,           |
+    |                                                                        |
+    |                GBT                                                     |
+    |                ARECIBO                                                 |
+    |                JODRELL                                                 |
+    |                LOFAR                                                   |
+    |                MEERKAT                                                 |
+    |                EFFELSBERG                                              |
+    |                NANCAY                                                  |
+    |                MEERKAT                                                 |
+    |                GMRT                                                    |
+    |                KAT-7                                                   |
+    |                WSRT                                                    |
+    |                VLA                                                     |
+    |                                                                        |
+    |                See the observatories.dat file of tempo2 for other      |
+    |                valid telescope codes.                                  |
+    |                                                                        |
     **************************************************************************
     | License:                                                               |
     |                                                                        |
@@ -224,6 +244,7 @@ class GeneratePredictorFiles:
         parser.add_option("--fcoeff", type="int", dest="fcoeff",help='The number of frequency coefficients to be computed by tempo2 (optional).',default=2)
         parser.add_option("--mjd1", action="store", dest="mjd1",help='Start time MJD.',default="56000")
         parser.add_option("--mjd2", action="store", dest="mjd2",help='Start time MJD.',default="56001")
+        parser.add_option("--tel", action="store", dest="tel",help='The telescope the observation corresponds to.',default="PARKES")
         (args,options) = parser.parse_args()# @UnusedVariable : Tells Eclipse IDE to ignore warning.
 
         # Update variables with command line parameters.
@@ -239,6 +260,7 @@ class GeneratePredictorFiles:
         self.batch      = args.batch
         self.mjd1       = args.mjd1
         self.mjd2       = args.mjd2
+        self.telescope  = args.tel
 
         # ****************************************
         #   Print command line arguments & Run
@@ -380,8 +402,9 @@ class GeneratePredictorFiles:
                             batchEntryCount+=1
 
                             #                                                  MJD 1  MJD2 FCH1 FCHN
-                            tempo2Command = "tempo2 -f " + path + " -pred \"@ "+self.mjd1+" "+self.mjd2+" "+ str(self.f1) + " " +\
-                                            str(self.f2) + " " + str(self.tcoeff) + " " + str(self.fcoeff) + " " + str(self.obsLength)+"\""
+                            tempo2Command = "tempo2 -f " + path + " -pred \"" +self.telescope + " " + self.mjd1+" "+\
+                                            self.mjd2+" "+ str(self.f1) + " " + str(self.f2) + " " + str(self.tcoeff) +\
+                                            " " + str(self.fcoeff) + " " + str(self.obsLength)+"\""
 
                             # Now try to execute the tempo2 command...
                             #
